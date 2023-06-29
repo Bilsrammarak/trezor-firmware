@@ -635,7 +635,6 @@ class InputFlowLockTimeBlockHeight(InputFlowBase):
     def input_flow_tr(self) -> BRGeneratorType:
         def assert_func(debug: DebugLink) -> None:
             assert "blockheight" in debug.wait_layout().text_content()
-            debug.press_right()
             assert self.block_height in debug.wait_layout().text_content()
 
         yield from lock_time_input_flow_tr(self.debug, assert_func)
@@ -656,9 +655,11 @@ class InputFlowLockTimeDatetime(InputFlowBase):
 
     def input_flow_tr(self) -> BRGeneratorType:
         def assert_func(debug: DebugLink):
+            lock_date, lock_time = self.lock_time_str.split()
             assert "Locktime" in debug.wait_layout().text_content()
+            assert lock_date in debug.wait_layout().text_content()
             debug.press_right()
-            assert self.lock_time_str in debug.wait_layout().text_content()
+            assert lock_time in debug.wait_layout().text_content()
 
         yield from lock_time_input_flow_tr(self.debug, assert_func)
 
