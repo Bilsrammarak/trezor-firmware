@@ -427,15 +427,21 @@ int bootloader_main(void) {
 
     ui_screen_welcome_model();
     hal_delay(1000);
-    ui_screen_welcome();
+    while (true) {
+      ui_screen_welcome();
 
-    // erase storage
-    ensure(flash_area_erase_bulk(STORAGE_AREAS, STORAGE_AREAS_COUNT, NULL),
-           NULL);
+      // erase storage
+      ensure(flash_area_erase_bulk(STORAGE_AREAS, STORAGE_AREAS_COUNT, NULL),
+             NULL);
 
-    // and start the usb loop
-    if (bootloader_usb_loop(NULL, NULL) != CONTINUE) {
-      return 1;
+      // and start the usb loop
+      usb_result_t res = bootloader_usb_loop(NULL, NULL);
+      if (res == CONTINUE) {
+        break;
+      }
+      if (res == SHUTDOWN) {
+        return 1;
+      }
     }
   }
 
