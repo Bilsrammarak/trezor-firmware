@@ -31,6 +31,7 @@ typedef enum {
   SCREEN_WIPE_CONFIRM = 2,
   SCREEN_FINGER_PRINT = 3,
   SCREEN_WAIT_FOR_HOST = 4,
+  SCREEN_WELCOME = 5,
 } screen_t;
 
 void ui_screen_boot(const vendor_header* const vhdr,

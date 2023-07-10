@@ -313,6 +313,7 @@ int bootloader_main(void) {
   vendor_header vhdr;
   // detect whether the device contains a valid firmware
   secbool firmware_present = sectrue;
+  secbool header_present = sectrue;
 
   if (sectrue != read_vendor_header((const uint8_t *)FIRMWARE_START, &vhdr)) {
     firmware_present = secfalse;
@@ -341,6 +342,9 @@ int bootloader_main(void) {
     firmware_present =
         check_image_header_sig(hdr, vhdr.vsig_m, vhdr.vsig_n, vhdr.vpub);
   }
+
+  header_present = firmware_present;
+
   if (sectrue == firmware_present) {
     firmware_present = check_image_contents(
         hdr, IMAGE_HEADER_SIZE + vhdr.hdrlen, &FIRMWARE_AREA);
@@ -410,56 +414,55 @@ int bootloader_main(void) {
   }
 #endif
 
-  // start the bootloader if no or broken firmware found ...
-  if (firmware_present != sectrue) {
-#ifdef TREZOR_EMULATOR
-    // wait a bit so that the empty lock icon is visible
-    // (on a real device, we are waiting for touch init which takes longer)
-    hal_delay(400);
-#endif
-    // ignore stay in bootloader
-    stay_in_bootloader = secfalse;
-    touched = false;
-
-    // show intro animation
-
-    ui_set_initial_setup(true);
-
-    ui_screen_welcome_model();
-    hal_delay(1000);
-    ui_screen_welcome();
-
-      // erase storage
-      ensure(flash_area_erase_bulk(STORAGE_AREAS, STORAGE_AREAS_COUNT, NULL),
-             NULL);
-
-    // and start the usb loop
-    usb_result_t res = bootloader_usb_loop(NULL, NULL);
-    switch (res) {
-      case CONTINUE_TO_FIRMWARE:
-        break;
-      case RETURN_TO_MENU:
-        stay_in_bootloader = sectrue;
-        break;
-      default:
-      case SHUTDOWN:
-        return 1;
-        break;
-    }
-  }
-
   // ... or if user touched the screen on start
   // ... or we have stay_in_bootloader flag to force it
-  if (touched || stay_in_bootloader == sectrue) {
-    ui_set_initial_setup(false);
+  // ... or there is no valid firmware
+  if (touched || stay_in_bootloader == sectrue || firmware_present != sectrue) {
+    screen_t screen;
+    if (header_present == sectrue) {
+      ui_set_initial_setup(false);
+      screen = SCREEN_INTRO;
+    } else {
+      screen = SCREEN_WELCOME;
+#ifdef TREZOR_EMULATOR
+      // wait a bit so that the empty lock icon is visible
+      // (on a real device, we are waiting for touch init which takes longer)
+      hal_delay(400);
+#endif
 
-    screen_t screen = SCREEN_INTRO;
+      // erase storage
+      ensure(flash_erase_sectors(STORAGE_SECTORS, STORAGE_SECTORS_COUNT, NULL),
+             NULL);
+
+      ui_set_initial_setup(true);
+    }
 
     while (true) {
       bool continue_to_firmware = false;
       uint32_t ui_result = 0;
 
       switch (screen) {
+        case SCREEN_WELCOME:
+          // show intro animation
+          ui_screen_boot_empty(false);
+          ui_screen_welcome_model();
+          hal_delay(1000);
+          ui_screen_welcome();
+
+          // and start the usb loop
+          switch (bootloader_usb_loop(NULL, NULL)) {
+            case CONTINUE_TO_FIRMWARE:
+              continue_to_firmware = true;
+              break;
+            case RETURN_TO_MENU:
+              break;
+            default:
+            case SHUTDOWN:
+              return 1;
+              break;
+          }
+          break;
+
         case SCREEN_INTRO:
           ui_result = ui_screen_intro(&vhdr, hdr);
           if (ui_result == 1) {
