@@ -924,6 +924,30 @@ async def confirm_total(
     )
 
 
+async def confirm_ethereum_tx(
+    recipient: str,
+    total_amount: str,
+    maximum_fee: str,
+    items: Iterable[tuple[str, str]],
+    br_type: str = "confirm_ethereum_tx",
+    br_code: ButtonRequestType = ButtonRequestType.SignTx,
+) -> None:
+    await raise_if_not_confirmed(
+        interact(
+            RustLayout(
+                trezorui2.confirm_ethereum_tx(
+                    recipient=recipient,
+                    total_amount=total_amount,
+                    maximum_fee=maximum_fee,
+                    items=items,
+                )
+            ),
+            br_type,
+            br_code,
+        )
+    )
+
+
 async def confirm_joint_total(spending_amount: str, total_amount: str) -> None:
 
     await raise_if_not_confirmed(

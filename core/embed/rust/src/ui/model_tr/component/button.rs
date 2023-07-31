@@ -633,12 +633,21 @@ where
         )
     }
 
-    /// Cancel cross on left and right arrow facing down.
+    /// Up arrow on left and right arrow facing down.
     pub fn up_arrow_none_arrow_wide() -> Self {
         Self::new(
             Some(ButtonDetails::up_arrow_icon()),
             None,
             Some(ButtonDetails::down_arrow_icon_wide()),
+        )
+    }
+
+    /// Up arrow on left, middle text and info on the right.
+    pub fn up_arrow_armed_info(text: T) -> Self {
+        Self::new(
+            Some(ButtonDetails::up_arrow_icon()),
+            Some(ButtonDetails::armed_text(text)),
+            Some(ButtonDetails::text("i".into()).with_fixed_width(theme::BUTTON_ICON_WIDTH)),
         )
     }
 
