@@ -28,21 +28,19 @@
 #include "display.h"
 #include "flash.h"
 #include "i2c.h"
-#include "mini_printf.h"
 #include "model.h"
 #include "mpu.h"
+#include "prodtest_common.h"
 #include "random_delays.h"
-#include "rng.h"
 #include "sbu.h"
 #include "sdcard.h"
 #include "secbool.h"
-#include "secret.h"
 #include "touch.h"
 #include "usb.h"
 
 #ifdef USE_OPTIGA
 #include "optiga_commands.h"
-#include "optiga_hal.h"
+#include "optiga_prodtest.h"
 #include "optiga_transport.h"
 #endif
 
@@ -55,8 +53,6 @@
 #define MODEL_IDENTIFIER "T2B1-"
 #endif
 
-enum { VCP_IFACE = 0x00 };
-
 static secbool startswith(const char *s, const char *prefix) {
   return sectrue * (0 == strncmp(s, prefix, strlen(prefix)));
 }
@@ -64,11 +60,6 @@ static secbool startswith(const char *s, const char *prefix) {
 static void vcp_intr(void) {
   display_clear();
   ensure(secfalse, "vcp_intr");
-}
-
-static void vcp_puts(const char *s, size_t len) {
-  int r = usb_vcp_write_blocking(VCP_IFACE, (const uint8_t *)s, len, -1);
-  (void)r;
 }
 
 static char vcp_getchar(void) {
@@ -99,64 +90,6 @@ static void vcp_readline(char *buf, size_t len) {
     *buf = '\0';
   }
 }
-
-static void vcp_print(const char *fmt, ...) {
-  static char buf[128];
-  va_list va;
-  va_start(va, fmt);
-  int r = mini_vsnprintf(buf, sizeof(buf), fmt, va);
-  va_end(va);
-  vcp_puts(buf, r);
-}
-
-static void vcp_println(const char *fmt, ...) {
-  static char buf[128];
-  va_list va;
-  va_start(va, fmt);
-  int r = mini_vsnprintf(buf, sizeof(buf), fmt, va);
-  va_end(va);
-  vcp_puts(buf, r);
-  vcp_puts("\r\n", 2);
-}
-
-static void vcp_println_hex(uint8_t *data, uint16_t len) {
-  for (int i = 0; i < len; i++) {
-    vcp_print("%02X", data[i]);
-  }
-  vcp_puts("\r\n", 2);
-}
-
-#ifdef USE_OPTIGA
-static uint8_t get_byte_from_hex(const char *hex) {
-  uint8_t result = 0;
-  for (int i = 0; i < 2; i++) {
-    result <<= 4;
-    if (hex[i] >= '0' && hex[i] <= '9') {
-      result |= hex[i] - '0';
-    } else if (hex[i] >= 'A' && hex[i] <= 'F') {
-      result |= hex[i] - 'A' + 10;
-    } else if (hex[i] >= 'a' && hex[i] <= 'f') {
-      result |= hex[i] - 'a' + 10;
-    } else {
-      return 0;
-    }
-  }
-  return result;
-}
-
-static int get_from_hex(uint8_t *buf, uint16_t buf_len, const char *hex) {
-  int len = 0;
-  for (int i = 0; i < buf_len; i++) {
-    uint8_t b = get_byte_from_hex(hex + i * 2);
-    if (b == 0) {
-      break;
-    }
-    buf[i] = b;
-    len++;
-  }
-  return len;
-}
-#endif
 
 static void usb_init_all(void) {
   enum {
@@ -539,10 +472,16 @@ static void test_otp_write(const char *args) {
 
 static void test_otp_write_device_variant(const char *args) {
 #ifdef USE_OPTIGA
-//  if (sectrue != is_optiga_locked()) {
-//    vcp_printf("ERROR: NOT LOCKED");
-//    return;
-//  }
+  optiga_locked_status status = get_optiga_locked_status();
+  if (status == OPTIGA_LOCKED_FALSE) {
+    vcp_println("ERROR NOT LOCKED");
+    return;
+  }
+
+  if (status != OPTIGA_LOCKED_TRUE) {
+    // Error reported by get_optiga_locked_status().
+    return;
+  }
 #endif
 
   volatile char data[32];
@@ -586,93 +525,9 @@ void cpuid_read(void) {
   cpuid[1] = LL_GetUID_Word1();
   cpuid[2] = LL_GetUID_Word2();
 
+  vcp_print("OK ");
   vcp_println_hex((uint8_t *)cpuid, sizeof(cpuid));
 }
-
-#ifdef USE_OPTIGA
-void pair_optiga(void) {
-  if (secret_wiped()) {
-    //    secret_write_header();
-    //
-    //    uint8_t data[] = {0, 0, 0, 0};  // todo replace by real key
-    //
-    //    secret_write(data, SECRET_OPTIGA_KEY_OFFSET, sizeof(data));
-  }
-}
-
-void optiga_lock(void) {}
-
-void optigaid_read(void) {
-  uint8_t optiga_id[27];
-  size_t data_size = 0;
-
-  optiga_open_application();
-  optiga_get_data_object(0xE0C2, false, optiga_id, sizeof(optiga_id),
-                         &data_size);
-
-  vcp_write_as_hex(optiga_id, sizeof(optiga_id));
-}
-
-void certinf_read(void) {
-  uint8_t cert[507];
-
-  // todo feed real data
-  for (int i = 0; i < sizeof(cert); i++) {
-    cert[i] = i;
-  }
-
-  vcp_write_as_hex(cert, sizeof(cert));
-}
-
-void certdev_write(char *data) {
-  // expected 507
-  uint8_t data_bytes[1024];
-
-  int len = get_from_hex(data_bytes, sizeof(data_bytes), data);
-
-  (void)len;
-  // TODO: write to optiga
-
-  vcp_println("OK");
-}
-
-void keyfido_handshake(char *data) {
-  // expected 97
-  uint8_t data_bytes[1024];
-
-  int len = get_from_hex(data_bytes, sizeof(data_bytes), data);
-
-  (void)len;
-  // todo
-
-  vcp_println("OK");
-}
-
-void keyfido_write(char *data) {
-  // expected 81
-  uint8_t data_bytes[1024];
-
-  int len = get_from_hex(data_bytes, sizeof(data_bytes), data);
-
-  (void)len;
-  // todo
-
-  vcp_printf("OK");
-}
-
-void certfido_write(char *data) {
-  // expected 465
-  uint8_t data_bytes[1024];
-
-  int len = get_from_hex(data_bytes, sizeof(data_bytes), data);
-
-  (void)len;
-  // todo
-
-  vcp_println("OK");
-}
-
-#endif
 
 #define BACKLIGHT_NORMAL 150
 
@@ -699,9 +554,8 @@ int main(void) {
 
 #ifdef USE_OPTIGA
   optiga_init();
+  optiga_open_application();
   pair_optiga();
-  // todo authenticate optiga communication
-  // todo delete optiga pairing key from RAM
 #endif
 
   mpu_config_prodtest();
@@ -763,17 +617,23 @@ int main(void) {
     } else if (startswith(line, "OPTIGAID READ")) {
       optigaid_read();
     } else if (startswith(line, "CERTINF READ")) {
-      certinf_read();
+      cert_read(OID_CERT_INF);
     } else if (startswith(line, "CERTDEV WRITE ")) {
-      certdev_write(line + 14);
-    } else if (startswith(line, "KEYFIDO HANDSHAKE ")) {
-      keyfido_handshake(line + 18);
+      cert_write(OID_CERT_DEV, line + 14);
+    } else if (startswith(line, "CERTDEV READ")) {
+      cert_read(OID_CERT_DEV);
+    } else if (startswith(line, "CERTFIDO WRITE ")) {
+      cert_write(OID_CERT_FIDO, line + 15);
+    } else if (startswith(line, "CERTFIDO READ")) {
+      cert_read(OID_CERT_FIDO);
     } else if (startswith(line, "KEYFIDO WRITE ")) {
       keyfido_write(line + 14);
-    } else if (startswith(line, "CERTFIDO WRITE ")) {
-      certfido_write(line + 15);
+    } else if (startswith(line, "KEYFIDO READ")) {
+      pubkey_read(OID_KEY_FIDO);
     } else if (startswith(line, "LOCK")) {
       optiga_lock();
+    } else if (startswith(line, "CHECK LOCKED")) {
+      check_locked();
 
 #endif
 
