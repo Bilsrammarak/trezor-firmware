@@ -10,14 +10,15 @@ use crate::{
         },
         display::{self, Font},
         geometry::{Alignment, Insets, Rect},
+        translations::TRANSLATIONS as TR,
         util::animation_disabled,
     },
 };
 
 use super::theme;
 
-const HEADER: &str = "COINJOIN IN PROGRESS";
-const FOOTER: &str = "Do not disconnect your Trezor!";
+const HEADER: &str = TR.coinjoin__title_progress;
+const FOOTER: &str = TR.coinjoin__do_not_disconnect;
 const FOOTER_TEXT_MARGIN: i16 = 8;
 const LOADER_OFFSET: i16 = -15;
 const LOADER_SPEED: u16 = 10;

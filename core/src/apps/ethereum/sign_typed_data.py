@@ -69,6 +69,7 @@ async def _generate_typed_data_hash(
         confirm_typed_data_final,
         should_show_domain,
     )
+    from trezor import translations as TR
 
     typed_data_envelope = TypedDataEnvelope(
         primary_type,
@@ -95,8 +96,8 @@ async def _generate_typed_data_hash(
         show_message = await should_show_struct(
             primary_type,
             typed_data_envelope.types[primary_type].members,
-            "Confirm message",
-            "Show full message",
+            TR.ethereum__confirm_message,
+            TR.ethereum__show_full_message,
         )
         message_hash = await typed_data_envelope.hash_struct(
             primary_type,

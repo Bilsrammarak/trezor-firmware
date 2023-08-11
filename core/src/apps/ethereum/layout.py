@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from trezor import ui
+from trezor import translations as TR, ui
 from trezor.enums import ButtonRequestType
 from trezor.strings import format_plural
 from trezor.ui.layouts import (
@@ -36,7 +36,7 @@ def require_confirm_tx(
     if to_bytes:
         to_str = address_from_bytes(to_bytes, network)
     else:
-        to_str = "new contract?"
+        to_str = TR.ethereum__new_contract
     return confirm_output(
         to_str,
         format_ethereum_amount(value, token, network),
@@ -52,15 +52,15 @@ async def require_confirm_fee(
     token: EthereumTokenInfo | None,
 ) -> None:
     await confirm_amount(
-        title="Confirm fee",
-        description="Gas price:",
+        title=TR.ethereum__confirm_fee,
+        description=TR.ethereum__gas_price,
         amount=format_ethereum_amount(gas_price, None, network),
     )
     await confirm_total(
         total_amount=format_ethereum_amount(spending, token, network),
         fee_amount=format_ethereum_amount(gas_price * gas_limit, None, network),
-        total_label="Amount sent:",
-        fee_label="Maximum fee:",
+        total_label=TR.ethereum__amount_sent,
+        fee_label=TR.ethereum__maximum_fee,
     )
 
 
@@ -73,20 +73,20 @@ async def require_confirm_eip1559_fee(
     token: EthereumTokenInfo | None,
 ) -> None:
     await confirm_amount(
-        "Confirm fee",
+        TR.ethereum__confirm_fee,
         format_ethereum_amount(max_gas_fee, None, network),
-        "Maximum fee per gas",
+        TR.ethereum__max_fee_per_gas,
     )
     await confirm_amount(
-        "Confirm fee",
+        TR.ethereum__confirm_fee,
         format_ethereum_amount(max_priority_fee, None, network),
-        "Priority fee per gas",
+        TR.ethereum__priority_fee_per_gas,
     )
     await confirm_total(
         format_ethereum_amount(spending, token, network),
         format_ethereum_amount(max_gas_fee * gas_limit, None, network),
-        total_label="Amount sent:",
-        fee_label="Maximum fee:",
+        total_label=TR.ethereum__amount_sent,
+        fee_label=TR.ethereum__maximum_fee,
     )
 
 
@@ -96,9 +96,9 @@ def require_confirm_unknown_token(address_bytes: bytes) -> Awaitable[None]:
 
     contract_address_hex = "0x" + hexlify(address_bytes).decode()
     return confirm_address(
-        "Unknown token",
+        TR.ethereum__unknown_token,
         contract_address_hex,
-        "Contract:",
+        TR.ethereum__contract,
         "unknown_token",
         br_code=ButtonRequestType.SignTx,
     )
@@ -110,7 +110,7 @@ def require_confirm_address(address_bytes: bytes) -> Awaitable[None]:
 
     address_hex = "0x" + hexlify(address_bytes).decode()
     return confirm_address(
-        "Signing address",
+        TR.ethereum__signing_address,
         address_hex,
         br_code=ButtonRequestType.SignTx,
     )
@@ -119,9 +119,9 @@ def require_confirm_address(address_bytes: bytes) -> Awaitable[None]:
 def require_confirm_data(data: bytes, data_total: int) -> Awaitable[None]:
     return confirm_blob(
         "confirm_data",
-        "Confirm data",
+        TR.ethereum__confirm_data,
         data,
-        f"Size: {data_total} bytes",
+        TR.ethereum__data_size_template.format(data_total),
         br_code=ButtonRequestType.SignTx,
         ask_pagination=True,
     )
@@ -132,9 +132,9 @@ async def confirm_typed_data_final() -> None:
 
     await confirm_action(
         "confirm_typed_data_final",
-        "Confirm typed data",
-        "Really sign EIP-712 typed data?",
-        verb="Hold to confirm",
+        TR.ethereum__confirm_typed_data,
+        TR.ethereum__sign_eip712,
+        verb=TR.buttons__hold_to_confirm,
         hold=True,
     )
 
@@ -142,9 +142,9 @@ async def confirm_typed_data_final() -> None:
 def confirm_empty_typed_message() -> Awaitable[None]:
     return confirm_text(
         "confirm_empty_typed_message",
-        "Confirm message",
+        TR.ethereum__confirm_message,
         "",
-        "No message field",
+        TR.ethereum__no_message_field,
     )
 
 
@@ -153,14 +153,14 @@ async def should_show_domain(name: bytes, version: bytes) -> bool:
     domain_version = decode_typed_data(version, "string")
 
     para = (
-        (ui.NORMAL, "Name and version"),
+        (ui.NORMAL, TR.ethereum__name_and_version),
         (ui.DEMIBOLD, domain_name),
         (ui.DEMIBOLD, domain_version),
     )
     return await should_show_more(
-        "Confirm domain",
+        TR.ethereum__confirm_domain,
         para,
-        "Show full domain",
+        TR.ethereum__show_full_domain,
         "should_show_domain",
     )
 
@@ -168,8 +168,8 @@ async def should_show_domain(name: bytes, version: bytes) -> bool:
 async def should_show_struct(
     description: str,
     data_members: list[EthereumStructMember],
-    title: str = "Confirm struct",
-    button_text: str = "Show full struct",
+    title: str = TR.ethereum__confirm_struct,
+    button_text: str = TR.ethereum__show_full_struct,
 ) -> bool:
     para = (
         (ui.DEMIBOLD, description),
@@ -196,7 +196,7 @@ async def should_show_array(
     return await should_show_more(
         limit_str(".".join(parent_objects)),
         para,
-        "Show full array",
+        TR.ethereum__show_full_array,
         "should_show_array",
     )
 

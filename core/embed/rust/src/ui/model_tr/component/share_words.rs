@@ -6,6 +6,7 @@ use crate::{
         },
         display::Font,
         geometry::{Alignment, Offset, Rect},
+        translations::TRANSLATIONS as TR,
     },
 };
 
@@ -71,9 +72,9 @@ where
     fn get_final_text(&self) -> String<50> {
         build_string!(
             50,
-            "I wrote down all ",
+            TR.share_words__wrote_down_all,
             inttostr!(self.share_words.len() as u8),
-            " words in order."
+            TR.share_words__words_in_order
         )
     }
 

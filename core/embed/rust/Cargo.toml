@@ -39,8 +39,10 @@ test = [
     "ui",
     "dma2d",
     "touch",
-    "backlight"
+    "backlight",
 ]
+lang_en = []
+lang_cs = []
 
 [lib]
 crate-type = ["staticlib"]

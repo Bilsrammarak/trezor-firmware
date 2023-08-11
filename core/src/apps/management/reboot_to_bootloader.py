@@ -6,16 +6,16 @@ if TYPE_CHECKING:
 
 
 async def reboot_to_bootloader(msg: RebootToBootloader) -> NoReturn:
-    from trezor import io, loop, utils
+    from trezor import io, loop, utils, translations as TR
     from trezor.messages import Success
     from trezor.ui.layouts import confirm_action
     from trezor.wire.context import get_context
 
     await confirm_action(
         "reboot",
-        "Go to bootloader",
-        "Do you want to restart Trezor in bootloader mode?",
-        verb="Restart",
+        TR.reboot_to_bootloader__title,
+        TR.reboot_to_bootloader__restart,
+        verb=TR.buttons__restart,
     )
     ctx = get_context()
     await ctx.write(Success(message="Rebooting"))

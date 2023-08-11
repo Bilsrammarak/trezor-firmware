@@ -3,6 +3,7 @@ use crate::{
     ui::{
         component::{Child, Component, Event, EventCtx},
         geometry::{Insets, Rect},
+        translations::TRANSLATIONS as TR,
     },
 };
 
@@ -28,7 +29,7 @@ where
     U: StringType + Clone,
 {
     pub fn new(content: T) -> Self {
-        let btn_layout = ButtonLayout::cancel_armed_info("CONFIRM".into());
+        let btn_layout = ButtonLayout::cancel_armed_info(TR.buttons__confirm.into());
         Self {
             content: Child::new(content),
             buttons: Child::new(ButtonController::new(btn_layout)),

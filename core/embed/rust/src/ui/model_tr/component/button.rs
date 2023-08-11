@@ -6,6 +6,7 @@ use crate::{
         constant,
         display::{self, Color, Font, Icon},
         geometry::{Alignment2D, Offset, Point, Rect},
+        translations::TRANSLATIONS as TR,
     },
 };
 
@@ -499,7 +500,7 @@ where
 
     /// Default button layout for all three buttons - icons.
     pub fn default_three_icons() -> Self {
-        Self::arrow_armed_arrow("SELECT".into())
+        Self::arrow_armed_arrow(TR.buttons__select.into())
     }
 
     /// Special middle text for default icon layout.

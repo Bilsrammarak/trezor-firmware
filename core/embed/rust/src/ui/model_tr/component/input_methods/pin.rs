@@ -5,6 +5,7 @@ use crate::{
         component::{text::common::TextBox, Child, Component, ComponentExt, Event, EventCtx},
         display::Icon,
         geometry::Rect,
+        translations::TRANSLATIONS as TR,
     },
 };
 
@@ -28,9 +29,13 @@ const EMPTY_PIN_STR: &str = "_";
 const CHOICE_LENGTH: usize = 13;
 const NUMBER_START_INDEX: usize = 3;
 const CHOICES: [(&str, PinAction, Option<Icon>); CHOICE_LENGTH] = [
-    ("DELETE", PinAction::Delete, Some(theme::ICON_DELETE)),
-    ("SHOW", PinAction::Show, Some(theme::ICON_EYE)),
-    ("ENTER", PinAction::Enter, Some(theme::ICON_TICK)),
+    (
+        TR.inputs__delete,
+        PinAction::Delete,
+        Some(theme::ICON_DELETE),
+    ),
+    (TR.inputs__show, PinAction::Show, Some(theme::ICON_EYE)),
+    (TR.inputs__enter, PinAction::Enter, Some(theme::ICON_TICK)),
     ("0", PinAction::Digit('0'), None),
     ("1", PinAction::Digit('1'), None),
     ("2", PinAction::Digit('2'), None),
@@ -60,7 +65,7 @@ impl<T: StringType + Clone> ChoiceFactory<T> for ChoiceFactoryPIN {
 
         // Action buttons have different middle button text
         if !matches!(action, PinAction::Digit(_)) {
-            let confirm_btn = ButtonDetails::armed_text("CONFIRM".into());
+            let confirm_btn = ButtonDetails::armed_text(TR.buttons__confirm.into());
             choice_item.set_middle_btn(Some(confirm_btn));
         }
 

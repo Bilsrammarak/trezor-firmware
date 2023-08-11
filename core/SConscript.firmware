@@ -9,6 +9,7 @@ PRODUCTION = ARGUMENTS.get('PRODUCTION', '0') == '1'
 BOOTLOADER_QA = ARGUMENTS.get('BOOTLOADER_QA', '0') == '1'
 EVERYTHING = BITCOIN_ONLY != '1'
 TREZOR_MODEL = ARGUMENTS.get('TREZOR_MODEL', 'T')
+TREZOR_LANG = ARGUMENTS.get('TREZOR_LANG', 'en')
 CMAKELISTS = int(ARGUMENTS.get('CMAKELISTS', 0))
 
 
@@ -549,6 +550,8 @@ if FROZEN:
         ] if "sd_card" not in FEATURES_AVAILABLE else []
     ))
 
+    SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/translations/*.py'))
+
     SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/messages/__init__.py'))
     SOURCE_PY.extend(Glob(SOURCE_PY_DIR + 'trezor/enums/*.py',
         exclude=[
@@ -686,6 +689,13 @@ def cargo_build():
     features.append('ui')
     if PYOPT == '0':
         features.append('ui_debug')
+
+    if TREZOR_LANG == 'en':
+        features.append('lang_en')
+    elif TREZOR_LANG == 'cs':
+        features.append('lang_cs')
+    else:
+        raise Exception(f'Unknown language: {TREZOR_LANG}')
 
     features.extend(FEATURES_AVAILABLE)
 

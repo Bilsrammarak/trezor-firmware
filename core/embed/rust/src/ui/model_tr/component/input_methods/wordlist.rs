@@ -4,6 +4,7 @@ use crate::{
     ui::{
         component::{text::common::TextBox, Child, Component, ComponentExt, Event, EventCtx},
         geometry::Rect,
+        translations::TRANSLATIONS as TR,
         util::char_to_string,
     },
 };
@@ -94,8 +95,11 @@ impl<T: StringType + Clone> ChoiceFactory<T> for ChoiceFactoryWordlist {
         // (is a requirement for WORDS, doing it for LETTERS as well to unite it)
         if choice_index == DELETE_INDEX {
             return (
-                ChoiceItem::new("DELETE", ButtonLayout::arrow_armed_arrow("CONFIRM".into()))
-                    .with_icon(theme::ICON_DELETE),
+                ChoiceItem::new(
+                    TR.inputs__delete,
+                    ButtonLayout::arrow_armed_arrow(TR.buttons__confirm.into()),
+                )
+                .with_icon(theme::ICON_DELETE),
                 WordlistAction::Delete,
             );
         }

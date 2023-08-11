@@ -5,6 +5,7 @@ use crate::{
         component::{text::common::TextBox, Child, Component, ComponentExt, Event, EventCtx},
         display::Icon,
         geometry::Rect,
+        translations::TRANSLATIONS as TR,
         util::char_to_string,
     },
 };
@@ -45,7 +46,12 @@ const SPACE_INDEX: usize = 7;
 
 // Menu text, action, icon data, middle button with CONFIRM
 const MENU: [(&str, PassphraseAction, Option<Icon>, bool); MENU_LENGTH] = [
-    ("SHOW", PassphraseAction::Show, Some(theme::ICON_EYE), true),
+    (
+        TR.inputs__show,
+        PassphraseAction::Show,
+        Some(theme::ICON_EYE),
+        true,
+    ),
     (
         "CANCEL_OR_DELETE", // will be chosen dynamically
         PassphraseAction::CancelOrDelete,
@@ -53,7 +59,7 @@ const MENU: [(&str, PassphraseAction, Option<Icon>, bool); MENU_LENGTH] = [
         true,
     ),
     (
-        "ENTER",
+        TR.inputs__enter,
         PassphraseAction::Enter,
         Some(theme::ICON_TICK),
         true,
@@ -83,7 +89,7 @@ const MENU: [(&str, PassphraseAction, Option<Icon>, bool); MENU_LENGTH] = [
         false,
     ),
     (
-        "SPACE",
+        TR.inputs__space,
         PassphraseAction::Character(' '),
         Some(theme::ICON_SPACE),
         false,
@@ -167,10 +173,10 @@ impl ChoiceFactoryPassphrase {
         let (mut text, action, mut icon, show_confirm) = MENU[choice_index];
         if matches!(action, PassphraseAction::CancelOrDelete) {
             if self.is_empty {
-                text = "CANCEL";
+                text = TR.inputs__cancel;
                 icon = Some(theme::ICON_CANCEL);
             } else {
-                text = "DELETE";
+                text = TR.inputs__delete;
                 icon = Some(theme::ICON_DELETE);
             }
         }
@@ -179,7 +185,7 @@ impl ChoiceFactoryPassphrase {
 
         // Action buttons have different middle button text
         if show_confirm {
-            let confirm_btn = ButtonDetails::armed_text("CONFIRM".into());
+            let confirm_btn = ButtonDetails::armed_text(TR.buttons__confirm.into());
             menu_item.set_middle_btn(Some(confirm_btn));
         }
 
@@ -197,8 +203,11 @@ impl ChoiceFactoryPassphrase {
     ) -> (ChoiceItem<T>, PassphraseAction) {
         if is_menu_choice(&self.current_category, choice_index) {
             (
-                ChoiceItem::new("BACK", ButtonLayout::arrow_armed_arrow("RETURN".into()))
-                    .with_icon(theme::ICON_ARROW_BACK_UP),
+                ChoiceItem::new(
+                    TR.inputs__back,
+                    ButtonLayout::arrow_armed_arrow(TR.inputs__return.into()),
+                )
+                .with_icon(theme::ICON_ARROW_BACK_UP),
                 PassphraseAction::Menu,
             )
         } else {

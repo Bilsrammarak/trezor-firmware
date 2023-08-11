@@ -264,6 +264,7 @@ STATIC mp_obj_str_t mod_trezorutils_revision_obj = {
 /// USE_SD_CARD: bool
 /// USE_BACKLIGHT: bool
 /// MODEL: str
+/// LANG: str
 /// INTERNAL_MODEL: str
 /// EMULATOR: bool
 /// BITCOIN_ONLY: bool
@@ -300,6 +301,8 @@ STATIC const mp_rom_map_elem_t mp_module_trezorutils_globals_table[] = {
     {MP_ROM_QSTR(MP_QSTR_USE_BACKLIGHT), mp_const_false},
 #endif
     {MP_ROM_QSTR(MP_QSTR_MODEL), MP_ROM_QSTR(MODEL_NAME_QSTR)},
+    // TREZOR_LANG_QSTR created in SConscript
+    {MP_ROM_QSTR(MP_QSTR_LANG), MP_ROM_QSTR(TREZOR_LANG_QSTR)},
     {MP_ROM_QSTR(MP_QSTR_INTERNAL_MODEL),
      MP_ROM_QSTR(MODEL_INTERNAL_NAME_QSTR)},
 #ifdef TREZOR_EMULATOR

@@ -1,6 +1,7 @@
 from micropython import const
 from typing import TYPE_CHECKING
 
+from trezor import translations as TR
 from trezor.enums import ButtonRequestType
 from trezor.strings import format_amount
 from trezor.ui import layouts
@@ -50,7 +51,7 @@ def format_coin_amount(amount: int, coin: CoinInfo, amount_unit: AmountUnit) -> 
 
 def account_label(coin: CoinInfo, address_n: Bip32Path | None) -> str:
     return (
-        "Multiple accounts"
+        TR.bitcoin__multiple_accounts
         if address_n is None
         else address_n_to_name(coin, list(address_n) + [0] * BIP32_WALLET_DEPTH)
         or f"Path {address_n_to_str(address_n)}"
@@ -75,7 +76,7 @@ async def confirm_output(
                 "omni_transaction",
                 "OMNI transaction",
                 omni.parse(data),
-                verb="Confirm",
+                verb=TR.buttons__confirm,
                 br_code=ButtonRequestType.ConfirmOutput,
             )
         else:
@@ -90,7 +91,7 @@ async def confirm_output(
         assert output.address is not None
         address_short = addresses.address_short(coin, output.address)
         if output.payment_req_index is not None:
-            title = "Confirm details"
+            title = TR.bitcoin__confirm_details
         else:
             title = None
 
@@ -121,21 +122,21 @@ async def confirm_decred_sstx_submission(
     amount = format_coin_amount(output.amount, coin, amount_unit)
 
     await layouts.confirm_value(
-        "Purchase ticket",
+        TR.bitcoin__purchase_ticket,
         amount,
-        "Ticket amount:",
+        TR.bitcoin__ticket_amount,
         "confirm_decred_sstx_submission",
         ButtonRequestType.ConfirmOutput,
-        verb="CONFIRM",
+        verb=TR.buttons__confirm,
     )
 
     await layouts.confirm_value(
-        "Purchase ticket",
+        TR.bitcoin__purchase_ticket,
         address_short,
-        "Voting rights to:",
+        TR.bitcoin__voting_rights,
         "confirm_decred_sstx_submission",
         ButtonRequestType.ConfirmOutput,
-        verb="PURCHASE",
+        verb=TR.buttons__purchase,
     )
 
 
@@ -153,7 +154,7 @@ async def confirm_payment_request(
         elif m.refund_memo is not None:
             pass
         elif m.coin_purchase_memo is not None:
-            memo_texts.append(f"Buying {m.coin_purchase_memo.amount}.")
+            memo_texts.append(f"{TR.words__buying} {m.coin_purchase_memo.amount}.")
         else:
             raise wire.DataError("Unrecognized memo type in payment request memo.")
 
@@ -244,7 +245,7 @@ async def confirm_feeoverthreshold(
     fee_amount = format_coin_amount(fee, coin, amount_unit)
     await layouts.show_warning(
         "fee_over_threshold",
-        "Unusually high fee.",
+        TR.bitcoin__unusually_high_fee,
         fee_amount,
         br_code=ButtonRequestType.FeeOverThreshold,
     )
@@ -253,8 +254,8 @@ async def confirm_feeoverthreshold(
 async def confirm_change_count_over_threshold(change_count: int) -> None:
     await layouts.show_warning(
         "change_count_over_threshold",
-        "A lot of change-outputs.",
-        f"{str(change_count)} outputs",
+        TR.bitcoin__lot_of_change_outputs,
+        f"{str(change_count)} {TR.words__outputs}",
         br_code=ButtonRequestType.SignTx,
     )
 
@@ -262,9 +263,9 @@ async def confirm_change_count_over_threshold(change_count: int) -> None:
 async def confirm_unverified_external_input() -> None:
     await layouts.show_warning(
         "unverified_external_input",
-        "The transaction contains unverified external inputs.",
-        "Continue anyway?",
-        button="Continue",
+        TR.bitcoin__unverified_external_inputs,
+        TR.words__continue_anyway,
+        button=TR.buttons__continue,
         br_code=ButtonRequestType.SignTx,
     )
 
@@ -275,23 +276,23 @@ async def confirm_nondefault_locktime(lock_time: int, lock_time_disabled: bool) 
     if lock_time_disabled:
         await layouts.show_warning(
             "nondefault_locktime",
-            "Locktime is set but will have no effect.",
-            "Continue anyway?",
-            button="Continue",
+            TR.bitcoin__locktime_no_effect,
+            TR.words__continue_anyway,
+            button=TR.buttons__continue,
             br_code=ButtonRequestType.SignTx,
         )
     else:
         if lock_time < _LOCKTIME_TIMESTAMP_MIN_VALUE:
-            text = "Locktime set to blockheight:"
+            text = TR.bitcoin__locktime_set_to_blockheight
             value = str(lock_time)
         else:
-            text = "Locktime set to:"
+            text = TR.bitcoin__locktime_set_to
             value = format_timestamp(lock_time)
         await layouts.confirm_value(
-            "Confirm locktime",
+            TR.bitcoin__confirm_locktime,
             value,
             text,
             "nondefault_locktime",
             br_code=ButtonRequestType.SignTx,
-            verb="Confirm",
+            verb=TR.buttons__confirm,
         )

@@ -33,6 +33,7 @@ async def get_address(msg: GetAddress, keychain: Keychain, coin: CoinInfo) -> Ad
     from trezor.enums import InputScriptType
     from trezor.messages import Address
     from trezor.ui.layouts import show_address
+    from trezor import translations as TR
 
     from apps.common.address_mac import get_address_mac
     from apps.common.paths import address_n_to_str, validate_path
@@ -110,7 +111,7 @@ async def get_address(msg: GetAddress, keychain: Keychain, coin: CoinInfo) -> Ad
         else:
             account_name = address_n_to_name(coin, address_n, script_type)
             if account_name is None:
-                account = "Unknown path"
+                account = TR.bitcoin__unknown_path
             elif account_name == "":
                 account = coin.coin_shortcut
             else:

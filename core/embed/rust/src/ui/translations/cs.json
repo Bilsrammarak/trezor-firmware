@@ -1,0 +1,112 @@
+{
+    "tutorial": {
+        "title_hello": "AHOJ",
+        "welcome_press_right": "Vítejte v Trezoru. Stiskněte vpravo pro pokračování.",
+        "use_trezor": "Použijte Trezor stisknutím levého a pravého tlačítka.\n\rPokračujte vpravo.",
+        "press_and_hold": "Stiskněte a podržte pravé tlačítko pro\nschválení důležitých operací.",
+        "title_screen_scroll": "POSUN OBRAZOVKY",
+        "scroll_down": "Stiskněte vpravo pro posun dolů a přečtěte si veškerý obsah, pokud text nezapadne na jednu obrazovku.\n\rStiskněte vlevo pro posun nahoru.",
+        "middle_click": "Stiskněte současně vlevo a vpravo pro potvrzení.",
+        "title_tutorial_complete": "TUTORIÁL DOKONČEN",
+        "ready_to_use": "Jste připraveni\npoužívat Trezor.",
+        "title_skip": "PŘESKOČIT TUTORIÁL",
+        "sure_you_want_skip": "Jste si jisti, že chcete\ntutoriál přeskočit?"
+    },
+    "reset": {
+        "by_continuing": "Pokračováním souhlasíte s podmínkami společnosti Trezor.",
+        "more_info_at": "Více informací na",
+        "tos_link": "trezor.io/tos"
+    },
+    "backup": {
+        "new_wallet_created": "Nová peněženka vytvořena.",
+        "it_should_be_backed_up": "Měla by být nyní zálohována!",
+        "recover_anytime": "Kdykoli můžete použít zálohu k obnovení peněženky.",
+        "title_backup_wallet": "ZÁLOHOVAT PENĚŽENKU"
+    },
+    "joint": {
+        "title": "SPOLEČNÁ TRANSAKCE",
+        "you_are_contributing": "Přispíváte:",
+        "to_the_total_amount": "Celkové částce:"
+    },
+    "modify_amount": {
+        "title": "UPRAVIT ČÁSTKU",
+        "decrease_amount": "Snížit částku o:",
+        "increase_amount": "Zvýšit částku o:",
+        "address": "Adresa:",
+        "new_amount": "Nová částka:"
+    },
+    "modify_fee": {
+        "title": "UPRAVIT POPLATEK",
+        "decrease_fee": "Snížit poplatek o:",
+        "increase_fee": "Zvýšit poplatek o:",
+        "no_change": "Váš poplatek se nezměnil.",
+        "transaction_fee": "Transakční poplatek:",
+        "fee_rate": "Sazba poplatku:"
+    },
+    "confirm_total": {
+        "title_fee": "INFORMACE O POPLATKU",
+        "fee_rate": "Sazba poplatku:",
+        "title_sending_from": "ODESLÁNÍ OD",
+        "account": "Účet:"
+    },
+    "passphrase": {
+        "please_enter": "Prosím, zadejte své heslo."
+    },
+    "addr_mismatch": {
+        "title": "NESOUHLASÍ ADRESA?",
+        "contact_support": "Prosím, obraťte se na podporu Trezor na",
+        "support_url": "trezor.io/support"
+    },
+    "coinjoin": {
+        "title": "AUTORIZOVAT COINJOIN",
+        "max_rounds": "Maximální počet kol:",
+        "max_mining_fee": "Maximální poplatek za těžbu:",
+        "title_progress": "COINJOIN V PRŮBĚHU",
+        "do_not_disconnect": "Neodpojujte svůj Trezor!"
+    },
+    "recovery": {
+        "title": "OBNOVIT PENĚŽENKU",
+        "title_dry_run": "KONTROLA ZÁLOHY",
+        "only_first_letters": "Budete muset vybrat pouze první 2-3 písmena každého slova.",
+        "cursor_will_change": "Pozice kurzoru se změní mezi položkami pro zvýšenou bezpečnost."
+    },
+    "address_details": {
+        "account": "Účet:",
+        "derivation_path": "Cesta odvození:"
+    },
+    "homescreen": {
+        "title_no_usb_connection": "ŽÁDNÉ USB PŘIPOJENÍ",
+        "click_to_connect": "Klikněte pro připojení",
+        "click_to_unlock": "Klikněte pro odemčení"
+    },
+    "word_count": {
+        "title": "POČET SLOV"
+    },
+    "share_words": {
+        "wrote_down_all": "Napsal jsem všechny ",
+        "words_in_order": " slova v pořadí."
+    },
+    "buttons": {
+        "hold_to_confirm": "PODRŽTE PRO POTVRZENÍ",
+        "confirm": "POTVRDIT",
+        "skip": "PŘESKOČIT",
+        "select": "VYBRAT",
+        "quit": "UKONČIT",
+        "again": "ZNOVU",
+        "view_full": "ZOBRAZIT CELÉ",
+        "back_up": "ZÁLOHOVAT",
+        "continue": "POKRAČOVAT"
+    },
+    "inputs": {
+        "enter": "ZADAT",
+        "show": "UKÁZAT",
+        "cancel": "ZRUŠIT",
+        "delete": "SMANAT",
+        "back": "ZPĚT",
+        "return": "VRÁTIT",
+        "space": "MEZERNÍK"
+    },
+    "words": {
+        "success": "ÚSPĚCH"
+    }
+}

@@ -7,6 +7,7 @@ use crate::{
         event::USBEvent,
         geometry::{Alignment2D, Insets, Offset, Point, Rect},
         layout::util::get_user_custom_image,
+        translations::TRANSLATIONS as TR,
     },
 };
 
@@ -72,7 +73,11 @@ where
         if !usb_configured() {
             self.fill_notification_background();
             // TODO: fill warning icons here as well?
-            display_center(baseline, &"NO USB CONNECTION", NOTIFICATION_FONT);
+            display_center(
+                baseline,
+                &TR.homescreen__title_no_usb_connection,
+                NOTIFICATION_FONT,
+            );
         } else if let Some((notification, _level)) = &self.notification {
             self.fill_notification_background();
             display_center(baseline, &notification.as_ref(), NOTIFICATION_FONT);
@@ -176,9 +181,9 @@ where
     pub fn new(label: T, bootscreen: bool) -> Self {
         let invisible_btn_layout = ButtonLayout::text_none_text("".into(), "".into());
         let instruction_str = if bootscreen {
-            "Click to Connect"
+            TR.homescreen__click_to_connect
         } else {
-            "Click to Unlock"
+            TR.homescreen__click_to_unlock
         };
         Lockscreen {
             label: Child::new(Label::centered(label, theme::TEXT_BIG)),

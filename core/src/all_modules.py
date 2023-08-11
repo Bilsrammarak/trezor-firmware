@@ -145,6 +145,12 @@ trezor.sdcard
 import trezor.sdcard
 trezor.strings
 import trezor.strings
+trezor.translations
+import trezor.translations
+trezor.translations.cs
+import trezor.translations.cs
+trezor.translations.en
+import trezor.translations.en
 trezor.ui
 import trezor.ui
 trezor.ui.layouts

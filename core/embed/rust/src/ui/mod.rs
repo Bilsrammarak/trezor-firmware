@@ -9,6 +9,7 @@ pub mod event;
 pub mod geometry;
 pub mod lerp;
 pub mod screens;
+pub mod translations;
 #[macro_use]
 pub mod util;
 
