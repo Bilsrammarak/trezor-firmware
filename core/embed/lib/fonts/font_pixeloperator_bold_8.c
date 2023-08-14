@@ -102,9 +102,40 @@
 /* } */ static const uint8_t Font_PixelOperator_Bold_8_glyph_125[] = { 5, 7, 6, 0, 7, 225, 140, 51, 27, 128 };
 /* ~ */ static const uint8_t Font_PixelOperator_Bold_8_glyph_126[] = { 7, 2, 8, 0, 7, 119, 184 };
 
-const uint8_t Font_PixelOperator_Bold_8_glyph_nonprintable[] = { 6, 7, 7, 0, 7, 132, 207, 57, 207, 252, 255 };
+/* Á */ static const uint8_t Font_PixelOperator_Bold_8_glyph_127[] = { 6, 7, 7, 0, 7, 24, 199, 179, 207, 252, 192 };
+/* Č */ static const uint8_t Font_PixelOperator_Bold_8_glyph_128[] = { 6, 7, 7, 0, 7, 205, 231, 179, 195, 55, 128 };
+/* Ď */ static const uint8_t Font_PixelOperator_Bold_8_glyph_129[] = { 6, 7, 7, 0, 7, 205, 239, 179, 207, 63, 128 };
+/* É */ static const uint8_t Font_PixelOperator_Bold_8_glyph_130[] = { 6, 7, 7, 0, 7, 24, 207, 240, 243, 15, 192 };
+/* Ě */ static const uint8_t Font_PixelOperator_Bold_8_glyph_131[] = { 6, 7, 7, 0, 7, 205, 239, 240, 243, 15, 192 };
+/* Í */ static const uint8_t Font_PixelOperator_Bold_8_glyph_132[] = { 3, 7, 5, 1, 7, 120, 109, 176 };
+/* Ň */ static const uint8_t Font_PixelOperator_Bold_8_glyph_133[] = { 6, 7, 7, 0, 7, 205, 236, 251, 255, 124, 192 };
+/* Ó */ static const uint8_t Font_PixelOperator_Bold_8_glyph_134[] = { 6, 7, 7, 0, 7, 24, 199, 179, 207, 55, 128 };
+/* Ř */ static const uint8_t Font_PixelOperator_Bold_8_glyph_135[] = { 6, 7, 7, 0, 7, 205, 239, 179, 207, 236, 192 };
+/* Š */ static const uint8_t Font_PixelOperator_Bold_8_glyph_136[] = { 6, 7, 7, 0, 7, 205, 231, 176, 120, 63, 128 };
+/* Ť */ static const uint8_t Font_PixelOperator_Bold_8_glyph_137[] = { 6, 7, 7, 0, 7, 205, 239, 204, 48, 195, 0 };
+/* Ú */ static const uint8_t Font_PixelOperator_Bold_8_glyph_138[] = { 6, 7, 7, 0, 7, 24, 204, 243, 207, 55, 128 };
+/* Ů */ static const uint8_t Font_PixelOperator_Bold_8_glyph_139[] = { 6, 7, 7, 0, 7, 123, 55, 128, 207, 55, 128 };
+/* Ý */ static const uint8_t Font_PixelOperator_Bold_8_glyph_140[] = { 6, 7, 7, 0, 7, 24, 204, 243, 120, 195, 0 };
+/* Ž */ static const uint8_t Font_PixelOperator_Bold_8_glyph_141[] = { 6, 7, 7, 0, 7, 205, 239, 198, 49, 143, 192 };
+/* á */ static const uint8_t Font_PixelOperator_Bold_8_glyph_142[] = { 6, 7, 7, 0, 7, 24, 199, 131, 127, 55, 192 };
+/* č */ static const uint8_t Font_PixelOperator_Bold_8_glyph_143[] = { 6, 7, 7, 0, 7, 205, 231, 179, 195, 55, 128 };
+/* ď */ static const uint8_t Font_PixelOperator_Bold_8_glyph_144[] = { 11, 7, 13, 0, 7, 12, 97, 141, 243, 102, 12, 193, 152, 31, 0 };
+/* é */ static const uint8_t Font_PixelOperator_Bold_8_glyph_145[] = { 6, 7, 7, 0, 7, 24, 199, 179, 255, 7, 128 };
+/* ě */ static const uint8_t Font_PixelOperator_Bold_8_glyph_146[] = { 6, 7, 7, 0, 7, 205, 231, 179, 255, 7, 128 };
+/* í */ static const uint8_t Font_PixelOperator_Bold_8_glyph_147[] = { 3, 7, 5, 1, 7, 120, 109, 176 };
+/* ň */ static const uint8_t Font_PixelOperator_Bold_8_glyph_148[] = { 6, 7, 7, 0, 7, 205, 239, 179, 207, 60, 192 };
+/* ó */ static const uint8_t Font_PixelOperator_Bold_8_glyph_149[] = { 6, 7, 7, 0, 7, 24, 199, 179, 207, 55, 128 };
+/* ř */ static const uint8_t Font_PixelOperator_Bold_8_glyph_150[] = { 6, 7, 7, 0, 7, 205, 236, 247, 227, 12, 0 };
+/* š */ static const uint8_t Font_PixelOperator_Bold_8_glyph_151[] = { 6, 7, 7, 0, 7, 205, 231, 176, 120, 63, 128 };
+/* ť */ static const uint8_t Font_PixelOperator_Bold_8_glyph_152[] = { 10, 7, 11, 0, 7, 0, 216, 63, 153, 128, 96, 24, 3, 128 };
+/* ú */ static const uint8_t Font_PixelOperator_Bold_8_glyph_153[] = { 6, 7, 7, 0, 7, 24, 204, 243, 207, 55, 128 };
+/* ů */ static const uint8_t Font_PixelOperator_Bold_8_glyph_154[] = { 6, 7, 7, 0, 7, 123, 55, 128, 207, 55, 128 };
+/* ý */ static const uint8_t Font_PixelOperator_Bold_8_glyph_155[] = { 6, 8, 7, 0, 7, 24, 204, 243, 205, 240, 222, 0 };
+/* ž */ static const uint8_t Font_PixelOperator_Bold_8_glyph_156[] = { 6, 7, 7, 0, 7, 205, 239, 198, 49, 143, 192 };
 
-const uint8_t * const Font_PixelOperator_Bold_8[126 + 1 - 32] = {
+/* ? */ const uint8_t Font_PixelOperator_Bold_8_glyph_nonprintable[] = { 6, 7, 7, 0, 7, 123, 48, 198, 48, 3, 0 };
+
+const uint8_t * const Font_PixelOperator_Bold_8[156 + 1 - 32] = {
     Font_PixelOperator_Bold_8_glyph_32,
     Font_PixelOperator_Bold_8_glyph_33,
     Font_PixelOperator_Bold_8_glyph_34,
@@ -200,4 +231,34 @@ const uint8_t * const Font_PixelOperator_Bold_8[126 + 1 - 32] = {
     Font_PixelOperator_Bold_8_glyph_124,
     Font_PixelOperator_Bold_8_glyph_125,
     Font_PixelOperator_Bold_8_glyph_126,
+    Font_PixelOperator_Bold_8_glyph_127,
+    Font_PixelOperator_Bold_8_glyph_128,
+    Font_PixelOperator_Bold_8_glyph_129,
+    Font_PixelOperator_Bold_8_glyph_130,
+    Font_PixelOperator_Bold_8_glyph_131,
+    Font_PixelOperator_Bold_8_glyph_132,
+    Font_PixelOperator_Bold_8_glyph_133,
+    Font_PixelOperator_Bold_8_glyph_134,
+    Font_PixelOperator_Bold_8_glyph_135,
+    Font_PixelOperator_Bold_8_glyph_136,
+    Font_PixelOperator_Bold_8_glyph_137,
+    Font_PixelOperator_Bold_8_glyph_138,
+    Font_PixelOperator_Bold_8_glyph_139,
+    Font_PixelOperator_Bold_8_glyph_140,
+    Font_PixelOperator_Bold_8_glyph_141,
+    Font_PixelOperator_Bold_8_glyph_142,
+    Font_PixelOperator_Bold_8_glyph_143,
+    Font_PixelOperator_Bold_8_glyph_144,
+    Font_PixelOperator_Bold_8_glyph_145,
+    Font_PixelOperator_Bold_8_glyph_146,
+    Font_PixelOperator_Bold_8_glyph_147,
+    Font_PixelOperator_Bold_8_glyph_148,
+    Font_PixelOperator_Bold_8_glyph_149,
+    Font_PixelOperator_Bold_8_glyph_150,
+    Font_PixelOperator_Bold_8_glyph_151,
+    Font_PixelOperator_Bold_8_glyph_152,
+    Font_PixelOperator_Bold_8_glyph_153,
+    Font_PixelOperator_Bold_8_glyph_154,
+    Font_PixelOperator_Bold_8_glyph_155,
+    Font_PixelOperator_Bold_8_glyph_156,
 };
