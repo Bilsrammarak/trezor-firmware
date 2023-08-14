@@ -62,7 +62,7 @@ pub const TRANSLATIONS: TranslationsGeneral = TranslationsGeneral {
     word_count__title: "POČET SLOV",
     share_words__wrote_down_all: "Napsal jsem všechny ",
     share_words__words_in_order: " slova v pořadí.",
-    buttons__hold_to_confirm: "PODRŽTE PRO POTVRZENÍ",
+    buttons__hold_to_confirm: "PODRŽTE",
     buttons__confirm: "POTVRDIT",
     buttons__skip: "PŘESKOČIT",
     buttons__select: "VYBRAT",
