@@ -309,6 +309,14 @@ int bootloader_main(void) {
 
   mpu_config_bootloader();
 
+  ui_screen_boot_empty(false);
+
+#ifdef TREZOR_EMULATOR
+  // wait a bit so that the empty lock icon is visible
+  // (on a real device, we are waiting for touch init which takes longer)
+  hal_delay(400);
+#endif
+
   const image_header *hdr = NULL;
   vendor_header vhdr;
   // detect whether the device contains a valid firmware
@@ -354,8 +362,6 @@ int bootloader_main(void) {
   set_core_clock(CLOCK_180_MHZ);
   display_set_little_endian();
 #endif
-
-  ui_screen_boot_empty(false);
 
 #ifdef USE_I2C
   i2c_init();
@@ -425,11 +431,6 @@ int bootloader_main(void) {
       screen = SCREEN_INTRO;
     } else {
       screen = SCREEN_WELCOME;
-#ifdef TREZOR_EMULATOR
-      // wait a bit so that the empty lock icon is visible
-      // (on a real device, we are waiting for touch init which takes longer)
-      hal_delay(400);
-#endif
 
       // erase storage
       ensure(flash_erase_sectors(STORAGE_SECTORS, STORAGE_SECTORS_COUNT, NULL),
