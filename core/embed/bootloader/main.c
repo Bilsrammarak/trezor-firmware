@@ -414,7 +414,8 @@ int bootloader_main(void) {
   }
 #endif
 
-  // ... or if user touched the screen on start
+  // start the bootloader ...
+  // ... if user touched the screen on start
   // ... or we have stay_in_bootloader flag to force it
   // ... or there is no valid firmware
   if (touched || stay_in_bootloader == sectrue || firmware_present != sectrue) {
