@@ -19,7 +19,7 @@
     },
     "backup": {
         "new_wallet_created": "Nová peněženka vytvořena.",
-        "it_should_be_backed_up": "Měla by být nyní zálohována!",
+        "it_should_be_backed_up": "Proveďte zálohu!",
         "recover_anytime": "Kdykoli můžete použít zálohu k obnovení peněženky.",
         "title_backup_wallet": "ZÁLOHOVAT PENĚŽENKU"
     },
@@ -101,7 +101,7 @@
         "enter": "ZADAT",
         "show": "UKÁZAT",
         "cancel": "ZRUŠIT",
-        "delete": "SMANAT",
+        "delete": "SMAZAT",
         "back": "ZPĚT",
         "return": "VRÁTIT",
         "space": "MEZERNÍK"

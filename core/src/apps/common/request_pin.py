@@ -2,7 +2,7 @@ import utime
 from typing import Any, NoReturn
 
 import storage.cache as storage_cache
-from trezor import config, utils, wire
+from trezor import config, translations as TR, utils, wire
 
 
 async def _request_sd_salt(
@@ -52,9 +52,9 @@ async def request_pin_confirm(*args: Any, **kwargs: Any) -> str:
     from trezor.ui.layouts import pin_mismatch_popup, confirm_reenter_pin
 
     while True:
-        pin1 = await request_pin("Enter new PIN", *args, **kwargs)
+        pin1 = await request_pin(TR.pin__enter_new, *args, **kwargs)
         await confirm_reenter_pin()
-        pin2 = await request_pin("Re-enter new PIN", *args, **kwargs)
+        pin2 = await request_pin(TR.pin__reenter_new, *args, **kwargs)
         if pin1 == pin2:
             return pin1
         await pin_mismatch_popup()
@@ -80,7 +80,7 @@ def _set_last_unlock_time() -> None:
 
 
 async def verify_user_pin(
-    prompt: str = "Enter PIN",
+    prompt: str = TR.pin__enter,
     allow_cancel: bool = True,
     retry: bool = True,
     cache_time_ms: int = 0,
@@ -115,7 +115,7 @@ async def verify_user_pin(
 
     while retry:
         pin = await request_pin_on_device(  # type: ignore ["request_pin_on_device" is possibly unbound]
-            "Enter PIN", config.get_pin_rem(), allow_cancel, wrong_pin=True
+            TR.pin__enter, config.get_pin_rem(), allow_cancel, wrong_pin=True
         )
         if config.unlock(pin, salt):
             _set_last_unlock_time()
@@ -129,8 +129,8 @@ async def error_pin_invalid() -> NoReturn:
 
     await show_error_and_raise(
         "warning_wrong_pin",
-        "The PIN you have entered is not valid.",
-        "Wrong PIN",  # header
+        TR.pin__invalid_pin,
+        TR.pin__title_wrong_pin,  # header
         exc=wire.PinInvalid,
     )
     assert False
@@ -141,8 +141,8 @@ async def error_pin_matches_wipe_code() -> NoReturn:
 
     await show_error_and_raise(
         "warning_invalid_new_pin",
-        "The new PIN must be different from your wipe code.",
-        "Invalid PIN",  # header
+        TR.pin__diff_from_wipe_code,
+        TR.pin__title_invalid_pin,  # header
         exc=wire.PinInvalid,
     )
     assert False

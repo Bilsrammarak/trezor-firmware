@@ -175,6 +175,7 @@ async def should_show_struct(
         (ui.DEMIBOLD, description),
         (
             ui.NORMAL,
+            # TODO: pluralize in translation
             format_plural("Contains {count} {plural}", len(data_members), "key"),
         ),
         (ui.NORMAL, ", ".join(field.name for field in data_members)),

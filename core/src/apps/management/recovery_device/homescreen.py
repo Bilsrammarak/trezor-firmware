@@ -188,6 +188,7 @@ async def _request_share_first_screen(word_count: int) -> None:
         else:
             await layout.homescreen_dialog(
                 TR.buttons__enter_share,
+                TR.recovery__enter_any_share,
                 TR.recovery__word_count_template.format(word_count),
                 show_info=True,
             )
