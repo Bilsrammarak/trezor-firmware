@@ -433,7 +433,7 @@ int bootloader_main(void) {
       screen = SCREEN_WELCOME;
 
       // erase storage
-      ensure(flash_erase_sectors(STORAGE_SECTORS, STORAGE_SECTORS_COUNT, NULL),
+      ensure(flash_area_erase_bulk(STORAGE_AREAS, STORAGE_AREAS_COUNT, NULL),
              NULL);
 
       ui_set_initial_setup(true);
