@@ -68,7 +68,7 @@ pub const TRANSLATIONS: TranslationsGeneral = TranslationsGeneral {
     buttons__select: "VYBRAT",
     buttons__quit: "UKONČIT",
     buttons__again: "ZNOVU",
-    buttons__view_full: "ZOBRAZIT CELÉ",
+    buttons__view_full: "VIDĚT VŠE",
     buttons__back_up: "ZÁLOHOVAT",
     buttons__continue: "POKRAČOVAT",
     inputs__enter: "ZADAT",

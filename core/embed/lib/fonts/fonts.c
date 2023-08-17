@@ -214,6 +214,7 @@ const uint8_t *font_get_glyph(int font, uint8_t c) {
   }
 
   // printable character
+  // TODO: take the 156 as a constant from all the fonts
   if (is_printable && c_2bytes >= ' ' && c_2bytes <= 156) {
     switch (font) {
 #ifdef TREZOR_FONT_NORMAL_ENABLE
