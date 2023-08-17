@@ -765,10 +765,8 @@ def cargo_build():
     if DMA2D:
         features.append('dma2d')
 
-    if TREZOR_LANG == 'en':
-        features.append('lang_en')
-    elif TREZOR_LANG == 'cs':
-        features.append('lang_cs')
+    if TREZOR_LANG in ('en', 'cs'):
+        features.append(f'lang_{TREZOR_LANG}')
     else:
         raise Exception(f'Unknown language: {TREZOR_LANG}')
 

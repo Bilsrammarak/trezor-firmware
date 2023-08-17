@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 czech_chars = [
     ("Á", "0xC381"),
     ("Č", "0xC48C"),

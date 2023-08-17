@@ -195,6 +195,7 @@ SOURCE_MOD += [
 
 CPPDEFINES_MOD += [
     'TREZOR_UI2',
+    ('TREZOR_LANG_QSTR', 'MP_QSTR_{}'.format(TREZOR_LANG)),
 ]
 
 if TREZOR_MODEL not in ('1', ):
@@ -690,10 +691,8 @@ def cargo_build():
     if PYOPT == '0':
         features.append('ui_debug')
 
-    if TREZOR_LANG == 'en':
-        features.append('lang_en')
-    elif TREZOR_LANG == 'cs':
-        features.append('lang_cs')
+    if TREZOR_LANG in ('en', 'cs'):
+        features.append(f'lang_{TREZOR_LANG}')
     else:
         raise Exception(f'Unknown language: {TREZOR_LANG}')
 

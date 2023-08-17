@@ -18,9 +18,10 @@
  */
 
 #include "fonts.h"
-#include <stdio.h>
 #include <stdbool.h>
 
+// TODO: make it return uint32_t (needs logic to assemble at most 4 bytes
+// together)
 static uint16_t convert_char_utf8(const uint8_t c) {
   // Considering only two-byte UTF-8 characters currently
   static uint8_t first_ut8_byte = 0;
@@ -47,7 +48,7 @@ static uint16_t convert_char_utf8(const uint8_t c) {
 
   if (first_ut8_byte) {
     // encountered a successive UTF-8 character ...
-   return ((uint16_t)first_ut8_byte << 8) | c;
+    return ((uint16_t)first_ut8_byte << 8) | c;
   } else {
     // ... or they are just non-printable ASCII characters
     return 0x7F;
@@ -213,7 +214,7 @@ const uint8_t *font_get_glyph(int font, uint8_t c) {
   }
 
   // printable character
-  if (is_printable && c_2bytes >= ' ') {
+  if (is_printable && c_2bytes >= ' ' && c_2bytes <= 156) {
     switch (font) {
 #ifdef TREZOR_FONT_NORMAL_ENABLE
       case FONT_NORMAL:
