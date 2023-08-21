@@ -44,7 +44,7 @@ async def confirm_fido_reset() -> bool:
     confirm = RustLayout(
         trezorui2.confirm_action(
             title=TR.fido__title_reset,
-            description=TR.fido__erase_credentials,
+            description=TR.fido__wanna_erase_credentials,
             action=None,
             verb_cancel="",
             verb=TR.buttons__confirm,

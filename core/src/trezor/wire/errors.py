@@ -1,3 +1,4 @@
+from trezor import translations as TR
 from trezor.enums import FailureType
 
 
@@ -24,7 +25,7 @@ class DataError(Error):
 
 
 class ActionCancelled(Error):
-    def __init__(self, message: str = "Cancelled") -> None:
+    def __init__(self, message: str = TR.errors__cancelled) -> None:
         super().__init__(FailureType.ActionCancelled, message)
 
 
@@ -34,12 +35,12 @@ class PinExpected(Error):
 
 
 class PinCancelled(Error):
-    def __init__(self, message: str = "PIN entry cancelled") -> None:
+    def __init__(self, message: str = TR.errors__pin_entry_cancelled) -> None:
         super().__init__(FailureType.PinCancelled, message)
 
 
 class PinInvalid(Error):
-    def __init__(self, message: str = "PIN invalid") -> None:
+    def __init__(self, message: str = TR.errors__pin_invalid) -> None:
         super().__init__(FailureType.PinInvalid, message)
 
 
@@ -74,7 +75,7 @@ class WipeCodeMismatch(Error):
 
 
 class InvalidSession(Error):
-    def __init__(self, message: str = "Invalid session") -> None:
+    def __init__(self, message: str = TR.errors__invalid_session) -> None:
         super().__init__(FailureType.InvalidSession, message)
 
 

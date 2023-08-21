@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from trezor import io, loop, ui
+from trezor import io, loop, translations as TR, ui
 from trezor.enums import ButtonRequestType
 from trezor.wire import ActionCancelled
 from trezor.wire.context import wait as ctx_wait
@@ -304,9 +304,9 @@ async def confirm_single(
 
 async def confirm_reset_device(title: str, recovery: bool = False) -> None:
     if recovery:
-        button = "RECOVER WALLET"
+        button = TR.reset__button_recover
     else:
-        button = "CREATE WALLET"
+        button = TR.reset__button_create
 
     await raise_if_not_confirmed(
         interact(
@@ -329,11 +329,11 @@ async def prompt_backup() -> bool:
     result = await interact(
         RustLayout(
             trezorui2.confirm_action(
-                title="SUCCESS",
-                action="New wallet created successfully.",
-                description="You should back up your new wallet right now.",
-                verb="BACK UP",
-                verb_cancel="SKIP",
+                title=TR.words__success.upper(),
+                action=TR.backup__new_wallet_created,
+                description=TR.backup__it_should_be_backed_up,
+                verb=TR.buttons__back_up,
+                verb_cancel=TR.buttons__skip,
             )
         ),
         "backup_device",
@@ -345,11 +345,11 @@ async def prompt_backup() -> bool:
     result = await interact(
         RustLayout(
             trezorui2.confirm_action(
-                title="WARNING",
-                action="Are you sure you want to skip the backup?",
-                description="You can back up your Trezor once, at any time.",
-                verb="BACK UP",
-                verb_cancel="SKIP",
+                title=TR.words__warning.upper(),
+                action=TR.backup__want_to_skip,
+                description=TR.backup__can_back_up_anytime,
+                verb=TR.buttons__back_up,
+                verb_cancel=TR.buttons__skip,
             )
         ),
         "backup_device",
@@ -362,7 +362,7 @@ async def confirm_path_warning(
     path: str,
     path_type: str | None = None,
 ) -> None:
-    title = "Unknown path" if not path_type else f"Unknown {path_type.lower()}"
+    title = f"{TR.words__unknown} {path_type if path_type else 'path'}"
     await show_warning(
         "path_warning",
         title,
@@ -378,7 +378,7 @@ async def confirm_homescreen(
         interact(
             RustLayout(
                 trezorui2.confirm_homescreen(
-                    title="SET HOMESCREEN",
+                    title=TR.homescreen__title_set,
                     image=image,
                 )
             ),
@@ -395,7 +395,7 @@ async def show_xpub(xpub: str, title: str) -> None:
                 trezorui2.confirm_blob(
                     title=title,
                     data=xpub,
-                    verb="CONFIRM",
+                    verb=TR.buttons__confirm,
                     verb_cancel=None,
                     extra=None,
                     description=None,
@@ -419,11 +419,9 @@ async def show_address(
     xpubs: Sequence[str] = (),
 ) -> None:
     send_button_request = True
-    title = (
-        "RECEIVE ADDRESS\n(MULTISIG)"
-        if multisig_index is not None
-        else "RECEIVE ADDRESS"
-    )
+    title = TR.address__title_receive_address
+    if multisig_index is not None:
+        title = f"{title}\n(MULTISIG)"
     while True:
         layout = RustLayout(
             trezorui2.confirm_address(
@@ -451,7 +449,11 @@ async def show_address(
 
             def xpub_title(i: int) -> str:
                 result = f"MULTISIG XPUB #{i + 1}\n"
-                result += "(YOURS)" if i == multisig_index else "(COSIGNER)"
+                result += (
+                    f"({TR.address__title_yours})"
+                    if i == multisig_index
+                    else f"({TR.address__title_cosigner})"
+                )
                 return result
 
             result = await ctx_wait(
@@ -475,7 +477,9 @@ async def show_address(
                 raise ActionCancelled
 
 
-def show_pubkey(pubkey: str, title: str = "Confirm public key") -> Awaitable[None]:
+def show_pubkey(
+    pubkey: str, title: str = TR.address__confirm_public_key
+) -> Awaitable[None]:
     return confirm_blob(
         "show_pubkey",
         title,
@@ -488,7 +492,7 @@ async def show_error_and_raise(
     br_type: str,
     content: str,
     subheader: str | None = None,
-    button: str = "CLOSE",
+    button: str = TR.buttons__close,
     exc: ExceptionType = ActionCancelled,
 ) -> NoReturn:
     await interact(
@@ -510,7 +514,7 @@ async def show_warning(
     br_type: str,
     content: str,
     subheader: str | None = None,
-    button: str = "CONTINUE",
+    button: str = TR.buttons__continue,
     br_code: ButtonRequestType = ButtonRequestType.Warning,
 ) -> None:
     await raise_if_not_confirmed(
@@ -532,7 +536,7 @@ async def show_success(
     br_type: str,
     content: str,
     subheader: str | None = None,
-    button: str = "CONTINUE",
+    button: str = TR.buttons__continue,
 ) -> None:
     await raise_if_not_confirmed(
         interact(
@@ -565,11 +569,11 @@ async def confirm_output(
         amount_title = title.upper()
         recipient_title = title.upper()
     elif output_index is not None:
-        amount_title = f"AMOUNT #{output_index + 1}"
-        recipient_title = f"RECIPIENT #{output_index + 1}"
+        amount_title = TR.send__title_amount + f"#{output_index + 1}"
+        recipient_title = TR.send__title_recipient + f"#{output_index + 1}"
     else:
-        amount_title = "SENDING AMOUNT"
-        recipient_title = "SENDING TO"
+        amount_title = TR.send__confirm_sending
+        recipient_title = TR.send__title_sending_to
 
     while True:
         result = await interact(
@@ -579,7 +583,7 @@ async def confirm_output(
                     subtitle=address_label,
                     description=None,
                     value=address,
-                    verb="CONTINUE",
+                    verb=TR.buttons__continue,
                     hold=False,
                     info_button=False,
                 )
@@ -597,7 +601,7 @@ async def confirm_output(
                     subtitle=None,
                     description=None,
                     value=amount,
-                    verb=None if hold else "CONFIRM",
+                    verb=None if hold else TR.buttons__confirm,
                     verb_cancel="^",
                     hold=hold,
                     info_button=False,
@@ -618,11 +622,11 @@ async def confirm_payment_request(
     result = await interact(
         RustLayout(
             trezorui2.confirm_with_info(
-                title="SENDING",
+                title=TR.send__title_sending,
                 items=[(ui.NORMAL, f"{amount} to\n{recipient_name}")]
                 + [(ui.NORMAL, memo) for memo in memos],
-                button="CONFIRM",
-                info_button="DETAILS",
+                button=TR.buttons__confirm,
+                info_button=TR.buttons__details,
             )
         ),
         "confirm_payment_request",
@@ -642,7 +646,7 @@ async def confirm_payment_request(
 async def should_show_more(
     title: str,
     para: Iterable[tuple[int, str]],
-    button_text: str = "Show all",
+    button_text: str = TR.buttons__show_all,
     br_type: str = "should_show_more",
     br_code: ButtonRequestType = BR_TYPE_OTHER,
     confirm: str | bytes | None = None,
@@ -653,7 +657,7 @@ async def should_show_more(
     Raises ActionCancelled if the user cancels.
     """
     if confirm is None or not isinstance(confirm, str):
-        confirm = "CONFIRM"
+        confirm = TR.buttons__confirm
 
     result = await interact(
         RustLayout(
@@ -703,7 +707,7 @@ async def _confirm_ask_pagination(
             paginated = RustLayout(
                 trezorui2.confirm_more(
                     title=title,
-                    button="CLOSE",
+                    button=TR.buttons__close,
                     items=[(ui.MONO, data)],
                 )
             )
@@ -721,7 +725,7 @@ async def confirm_blob(
     title: str,
     data: bytes | str,
     description: str | None = None,
-    verb: str = "CONFIRM",
+    verb: str = TR.buttons__confirm,
     hold: bool = False,
     br_code: ButtonRequestType = BR_TYPE_OTHER,
     ask_pagination: bool = False,
@@ -756,7 +760,7 @@ async def confirm_blob(
 async def confirm_address(
     title: str,
     address: str,
-    description: str | None = "Address:",
+    description: str | None = TR.address__address,
     br_type: str = "confirm_address",
     br_code: ButtonRequestType = BR_TYPE_OTHER,
 ) -> None:
@@ -766,7 +770,7 @@ async def confirm_address(
         description or "",
         br_type,
         br_code,
-        verb="CONFIRM",
+        verb=TR.buttons__confirm,
     )
 
 
@@ -783,14 +787,14 @@ async def confirm_text(
         description or "",
         br_type,
         br_code,
-        verb="CONFIRM",
+        verb=TR.buttons__confirm,
     )
 
 
 def confirm_amount(
     title: str,
     amount: str,
-    description: str = "Amount:",
+    description: str = TR.send__amount,
     br_type: str = "confirm_amount",
     br_code: ButtonRequestType = BR_TYPE_OTHER,
 ) -> Awaitable[None]:
@@ -800,7 +804,7 @@ def confirm_amount(
         description,
         br_type,
         br_code,
-        verb="CONFIRM",
+        verb=TR.buttons__confirm,
     )
 
 
@@ -872,9 +876,9 @@ async def confirm_total(
     total_amount: str,
     fee_amount: str,
     fee_rate_amount: str | None = None,
-    title: str = "SUMMARY",
-    total_label: str = "Total amount:",
-    fee_label: str = "Including fee:",
+    title: str = TR.words__title_summary,
+    total_label: str = TR.send__total_amount,
+    fee_label: str = TR.send__including_fee,
     account_label: str | None = None,
     br_type: str = "confirm_total",
     br_code: ButtonRequestType = ButtonRequestType.SignTx,
@@ -903,10 +907,10 @@ async def confirm_joint_total(spending_amount: str, total_amount: str) -> None:
         interact(
             RustLayout(
                 trezorui2.confirm_total(
-                    title="JOINT TRANSACTION",
+                    title=TR.send__title_joint_transaction,
                     items=[
-                        ("You are contributing:", spending_amount),
-                        ("To the total amount:", total_amount),
+                        (TR.send__you_are_contributing, spending_amount),
+                        (TR.send__to_the_total_amount, total_amount),
                     ],
                 )
             ),
@@ -923,7 +927,7 @@ async def confirm_metadata(
     param: str | None = None,
     br_code: ButtonRequestType = ButtonRequestType.SignTx,
     hold: bool = False,
-    verb: str = "CONTINUE",
+    verb: str = TR.buttons__continue,
 ) -> None:
     await confirm_action(
         br_type,
@@ -941,8 +945,8 @@ async def confirm_replacement(title: str, txid: str) -> None:
     await confirm_blob(
         title=title.upper(),
         data=txid,
-        description="Transaction ID:",
-        verb="CONTINUE",
+        description=TR.send__transaction_id,
+        verb=TR.buttons__continue,
         br_type="confirm_replacement",
         br_code=ButtonRequestType.SignTx,
     )
@@ -965,11 +969,11 @@ async def confirm_modify_output(
             ctx_wait(
                 RustLayout(
                     trezorui2.confirm_blob(
-                        title="MODIFY AMOUNT",
+                        title=TR.bitcoin__title_modify_amount,
                         data=address,
-                        verb="CONTINUE",
+                        verb=TR.buttons__continue,
                         verb_cancel=None,
-                        description="Address:",
+                        description=TR.address__address,
                         extra=None,
                     )
                 )
@@ -1039,9 +1043,9 @@ async def confirm_modify_fee(
     info_layout = RustLayout(
         trezorui2.show_spending_details(
             account=None,
-            title="FEE INFORMATION",
+            title=TR.bitcoin__title_fee_information,
             fee_rate=fee_rate_amount,
-            fee_rate_title="New fee rate:",
+            fee_rate_title=TR.bitcoin__new_fee_rate,
         )
     )
     await with_info(fee_layout, info_layout, "modify_fee", ButtonRequestType.SignTx)
@@ -1067,7 +1071,7 @@ async def confirm_sign_identity(
     proto: str, identity: str, challenge_visual: str | None
 ) -> None:
     await confirm_blob(
-        title=f"Sign {proto}",
+        title=f"{TR.words__sign} {proto}",
         data=identity,
         description=challenge_visual + "\n" if challenge_visual else "",
         br_type="sign_identity",
@@ -1079,17 +1083,17 @@ async def confirm_signverify(
     coin: str, message: str, address: str, verify: bool
 ) -> None:
     if verify:
-        title = f"VERIFY {coin} MESSAGE"
+        title = TR.sign_message__verify_message_template.format(coin)
         br_type = "verify_message"
     else:
-        title = f"SIGN {coin} MESSAGE"
+        title = TR.sign_message__sign_message_template.format(coin)
         br_type = "sign_message"
 
     await confirm_blob(
         br_type,
         title,
         address,
-        "Confirm address:",
+        TR.sign_message__confirm_address,
         br_code=BR_TYPE_OTHER,
     )
 
@@ -1097,7 +1101,7 @@ async def confirm_signverify(
         br_type,
         title,
         message,
-        "Confirm message:",
+        TR.sign_message__confirm_message,
         br_code=BR_TYPE_OTHER,
     )
 
@@ -1131,7 +1135,7 @@ def request_passphrase_on_host() -> None:
     draw_simple(
         trezorui2.show_simple(
             title=None,
-            description="Please enter your passphrase.",
+            description=TR.passphrase__please_enter,
         )
     )
 
@@ -1139,7 +1143,9 @@ def request_passphrase_on_host() -> None:
 async def request_passphrase_on_device(max_len: int) -> str:
     result = await interact(
         RustLayout(
-            trezorui2.request_passphrase(prompt="Enter passphrase", max_len=max_len)
+            trezorui2.request_passphrase(
+                prompt=TR.passphrase__title_enter, max_len=max_len
+            )
         ),
         "passphrase_device",
         ButtonRequestType.PassphraseEntry,
@@ -1162,9 +1168,9 @@ async def request_pin_on_device(
     if attempts_remaining is None:
         subprompt = ""
     elif attempts_remaining == 1:
-        subprompt = "Last attempt"
+        subprompt = TR.pin__last_attempt
     else:
-        subprompt = f"{attempts_remaining} tries left"
+        subprompt = f"{attempts_remaining} {TR.pin__tries_left}"
 
     result = await interact(
         RustLayout(
@@ -1195,21 +1201,21 @@ async def pin_mismatch_popup(
     is_wipe_code: bool = False,
 ) -> None:
     await button_request("pin_mismatch", code=BR_TYPE_OTHER)
-    title = "Wipe code mismatch" if is_wipe_code else "PIN mismatch"
-    description = "wipe codes" if is_wipe_code else "PINs"
+    title = TR.wipe_code__title_mismatch if is_wipe_code else TR.pin__title_mismatch
+    description = TR.wipe_code__mismatch if is_wipe_code else TR.pin__mismatch
     return await show_error_popup(
         title,
-        f"The {description} you entered do not match.",
-        button="TRY AGAIN",
+        description,
+        button=TR.buttons__try_again,
     )
 
 
 async def wipe_code_same_as_pin_popup() -> None:
     await button_request("wipe_code_same_as_pin", code=BR_TYPE_OTHER)
     return await show_error_popup(
-        "Invalid wipe code",
-        "The wipe code must be different from your PIN.",
-        button="TRY AGAIN",
+        TR.wipe_code__title_invalid,
+        TR.wipe_code__diff_from_pin,
+        button=TR.buttons__try_again,
     )
 
 
@@ -1226,12 +1232,10 @@ async def confirm_set_new_pin(
                 trezorui2.confirm_emphasized(
                     title=title.upper(),
                     items=(
-                        "Turn on ",
                         (True, description),
-                        " protection?\n\n",
                         information,
                     ),
-                    verb="TURN ON",
+                    verb=TR.buttons__turn_on,
                 )
             ),
             br_type,

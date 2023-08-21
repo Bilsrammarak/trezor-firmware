@@ -38,6 +38,7 @@ def render_empty_loader(message: str, description: str) -> None:
 
 def show_pin_timeout(seconds: int, progress: int, message: str) -> bool:
     from trezor.ui.layouts.progress import pin_progress
+    from trezor import translations as TR
 
     # Possibility to ignore certain messages - not showing loader for them
     if message in _ignore_loader_messages:
@@ -56,11 +57,11 @@ def show_pin_timeout(seconds: int, progress: int, message: str) -> bool:
 
     if seconds != _previous_seconds:
         if seconds == 0:
-            remaining = "Done"
+            remaining = TR.progress__done
         elif seconds == 1:
-            remaining = "1 second left"
+            remaining = TR.progress__one_second_left
         else:
-            remaining = f"{seconds} seconds left"
+            remaining = TR.progress__x_seconds_left_template.format(seconds)
         _previous_remaining = remaining
         _previous_seconds = seconds
     else:

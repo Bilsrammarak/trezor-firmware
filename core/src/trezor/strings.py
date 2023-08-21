@@ -60,6 +60,7 @@ def format_duration_ms(milliseconds: int) -> str:
     """
     Returns human-friendly representation of a duration. Truncates all decimals.
     """
+    # TODO: translate
     units = (
         ("hour", 60 * 60 * 1000),
         ("minute", 60 * 1000),

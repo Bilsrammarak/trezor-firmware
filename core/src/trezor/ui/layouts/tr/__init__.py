@@ -925,7 +925,6 @@ async def confirm_total(
 
 
 async def confirm_joint_total(spending_amount: str, total_amount: str) -> None:
-
     await raise_if_not_confirmed(
         interact(
             RustLayout(
@@ -1050,10 +1049,10 @@ async def confirm_signverify(
     coin: str, message: str, address: str, verify: bool
 ) -> None:
     if verify:
-        header = TR.sign_message__verify_message
+        header = TR.sign_message__verify_message_template.format(coin)
         br_type = "verify_message"
     else:
-        header = TR.sign_message__sign_message
+        header = TR.sign_message__sign_message_template.format(coin)
         br_type = "sign_message"
 
     await confirm_blob(
@@ -1173,7 +1172,7 @@ async def confirm_reenter_pin(
     )
 
 
-async def confirm_multiple_pages_texts(
+async def _confirm_multiple_pages_texts(
     br_type: str,
     title: str,
     items: list[str],
@@ -1227,7 +1226,7 @@ async def confirm_set_new_pin(
     information: str,
     br_code: ButtonRequestType = BR_TYPE_OTHER,
 ) -> None:
-    await confirm_multiple_pages_texts(
+    await _confirm_multiple_pages_texts(
         br_type,
         title.upper(),
         [description, information],
@@ -1244,7 +1243,7 @@ async def confirm_set_new_pin(
         TR.pin__should_be_long,
         TR.pin__cursor_will_change,
     ]
-    await confirm_multiple_pages_texts(
+    await _confirm_multiple_pages_texts(
         br_type,
         title.upper(),
         next_info,

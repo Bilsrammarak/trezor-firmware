@@ -15,9 +15,7 @@
 
 <%
 import json
-
 from pathlib import Path
-from itertools import chain
 
 THIS = Path(local.filename).resolve()
 SRCDIR = THIS.parent
