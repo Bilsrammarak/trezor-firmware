@@ -133,7 +133,7 @@
 /* ý */ static const uint8_t Font_PixelOperator_Bold_8_glyph_155[] = { 6, 8, 7, 0, 7, 24, 204, 243, 205, 240, 222, 0 };
 /* ž */ static const uint8_t Font_PixelOperator_Bold_8_glyph_156[] = { 6, 7, 7, 0, 7, 205, 239, 198, 49, 143, 192 };
 
-/* ? */ const uint8_t Font_PixelOperator_Bold_8_glyph_nonprintable[] = { 6, 7, 7, 0, 7, 123, 48, 198, 48, 3, 0 };
+/* ? */ const uint8_t Font_PixelOperator_Bold_8_glyph_nonprintable[] = { 6, 7, 7, 0, 7, 132, 207, 57, 207, 252, 255 };
 
 const uint8_t * const Font_PixelOperator_Bold_8[156 + 1 - 32] = {
     Font_PixelOperator_Bold_8_glyph_32,

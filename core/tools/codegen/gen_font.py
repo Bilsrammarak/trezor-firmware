@@ -148,6 +148,7 @@ class Glyph:
             bearingY=bearingY,
             buf=buf,
             num_grays=bitmap.num_grays,
+            inverse_colors=inverse_colors,
         )
 
     def print_metrics(self) -> None:

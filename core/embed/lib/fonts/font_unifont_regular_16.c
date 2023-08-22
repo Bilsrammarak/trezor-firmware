@@ -137,7 +137,7 @@
 /* ý */ static const uint8_t Font_Unifont_Regular_16_glyph_155[] = { 6, 14, 7, 0, 12, 25, 128, 0, 134, 24, 97, 133, 51, 65, 5, 224 };
 /* ž */ static const uint8_t Font_Unifont_Regular_16_glyph_156[] = { 6, 12, 7, 0, 12, 72, 192, 0, 252, 16, 132, 33, 8, 63, 0 };
 
-/* ? */ const uint8_t Font_Unifont_Regular_16_glyph_nonprintable[] = { 6, 10, 7, 0, 10, 122, 24, 65, 8, 65, 0, 16, 64 };
+/* ? */ const uint8_t Font_Unifont_Regular_16_glyph_nonprintable[] = { 6, 10, 7, 0, 10, 133, 231, 190, 247, 190, 255, 239, 191 };
 
 const uint8_t * const Font_Unifont_Regular_16[156 + 1 - 32] = {
     Font_Unifont_Regular_16_glyph_32,
