@@ -42,6 +42,7 @@ use crate::{
                 PropsList,
             },
         },
+        translations::TRANSLATIONS as TR,
     },
 };
 
@@ -622,7 +623,7 @@ extern "C" fn new_confirm_address(n_args: usize, args: *const Obj, kwargs: *mut 
         }
         .into_paragraphs();
 
-        let buttons = Button::cancel_confirm_text(None, Some("CONFIRM"));
+        let buttons = Button::cancel_confirm_text(None, Some(TR.buttons__confirm));
         let obj = LayoutObj::new(
             Frame::left_aligned(
                 theme::label_title(),
@@ -657,7 +658,7 @@ extern "C" fn new_confirm_properties(n_args: usize, args: *const Obj, kwargs: *m
                 SwipeHoldPage::new(paragraphs.into_paragraphs(), theme::BG),
             ))?
         } else {
-            let buttons = Button::cancel_confirm_text(None, Some("CONFIRM"));
+            let buttons = Button::cancel_confirm_text(None, Some(TR.buttons__confirm));
             LayoutObj::new(Frame::left_aligned(
                 theme::label_title(),
                 title,
@@ -686,7 +687,7 @@ extern "C" fn new_confirm_homescreen(n_args: usize, args: *const Obj, kwargs: *m
             _ => return Err(value_error!("Invalid image.")),
         };
 
-        let buttons = Button::cancel_confirm_text(None, Some("CONFIRM"));
+        let buttons = Button::cancel_confirm_text(None, Some(TR.buttons__confirm));
         let obj = LayoutObj::new(Frame::centered(
             theme::label_title(),
             title,
@@ -706,12 +707,10 @@ extern "C" fn new_confirm_reset_device(n_args: usize, args: *const Obj, kwargs: 
         let paragraphs = Paragraphs::new([
             Paragraph::new(
                 &theme::TEXT_NORMAL,
-                StrBuffer::from(
-                    "By continuing you agree\nto Trezor Company's\nterms and conditions.\r",
-                ),
+                StrBuffer::from(TR.reset__by_continuing),
             ),
-            Paragraph::new(&theme::TEXT_NORMAL, StrBuffer::from("More info at")),
-            Paragraph::new(&theme::TEXT_DEMIBOLD, StrBuffer::from("trezor.io/tos")),
+            Paragraph::new(&theme::TEXT_NORMAL, StrBuffer::from(TR.reset__more_info_at)),
+            Paragraph::new(&theme::TEXT_DEMIBOLD, StrBuffer::from(TR.reset__tos_link)),
         ]);
         let buttons = Button::cancel_confirm(
             Button::with_icon(theme::ICON_CANCEL),
@@ -752,17 +751,22 @@ extern "C" fn new_show_address_details(n_args: usize, args: *const Obj, kwargs: 
 
 extern "C" fn new_show_spending_details(n_args: usize, args: *const Obj, kwargs: *mut Map) -> Obj {
     let block = move |_args: &[Obj], kwargs: &Map| {
-        let title: StrBuffer = kwargs.get_or(Qstr::MP_QSTR_title, "INFORMATION".into())?;
+        let title: StrBuffer = kwargs.get_or(
+            Qstr::MP_QSTR_title,
+            TR.confirm_total__title_information.into(),
+        )?;
         let account: Option<StrBuffer> = kwargs.get(Qstr::MP_QSTR_account)?.try_into_option()?;
         let fee_rate: Option<StrBuffer> = kwargs.get(Qstr::MP_QSTR_fee_rate)?.try_into_option()?;
-        let fee_rate_title: StrBuffer =
-            kwargs.get_or(Qstr::MP_QSTR_fee_rate_title, "Fee rate:".into())?;
+        let fee_rate_title: StrBuffer = kwargs.get_or(
+            Qstr::MP_QSTR_fee_rate_title,
+            TR.confirm_total__fee_rate.into(),
+        )?;
 
         let mut paragraphs = ParagraphVecShort::new();
         if let Some(a) = account {
             paragraphs.add(Paragraph::new(
                 &theme::TEXT_NORMAL,
-                "Sending from account:".into(),
+                TR.confirm_total__sending_from_account.into(),
             ));
             paragraphs.add(Paragraph::new(&theme::TEXT_MONO, a));
         }
@@ -846,22 +850,22 @@ extern "C" fn new_confirm_modify_output(n_args: usize, args: *const Obj, kwargs:
         let amount_new: StrBuffer = kwargs.get(Qstr::MP_QSTR_amount_new)?.try_into()?;
 
         let description = if sign < 0 {
-            "Decrease amount by:"
+            TR.modify_amount__decrease_amount
         } else {
-            "Increase amount by:"
+            TR.modify_amount__increase_amount
         };
 
         let paragraphs = Paragraphs::new([
             Paragraph::new(&theme::TEXT_NORMAL, description.into()),
             Paragraph::new(&theme::TEXT_MONO, amount_change),
-            Paragraph::new(&theme::TEXT_NORMAL, "New amount:".into()),
+            Paragraph::new(&theme::TEXT_NORMAL, TR.modify_amount__new_amount.into()),
             Paragraph::new(&theme::TEXT_MONO, amount_new),
         ]);
 
-        let buttons = Button::cancel_confirm_text(Some("^"), Some("CONTINUE"));
+        let buttons = Button::cancel_confirm_text(Some("^"), Some(TR.buttons__continue));
         let obj = LayoutObj::new(Frame::left_aligned(
             theme::label_title(),
-            "MODIFY AMOUNT",
+            TR.modify_amount__title,
             SwipePage::new(paragraphs, buttons, theme::BG),
         ))?;
         Ok(obj.into())
@@ -877,12 +881,20 @@ extern "C" fn new_confirm_modify_fee(n_args: usize, args: *const Obj, kwargs: *m
         let total_fee_new: StrBuffer = kwargs.get(Qstr::MP_QSTR_total_fee_new)?.try_into()?;
 
         let (description, change, total_label) = match sign {
-            s if s < 0 => ("Decrease fee by:", user_fee_change, "New transaction fee:"),
-            s if s > 0 => ("Increase fee by:", user_fee_change, "New transaction fee:"),
+            s if s < 0 => (
+                TR.modify_fee__decrease_fee,
+                user_fee_change,
+                TR.modify_fee__new_transaction_fee,
+            ),
+            s if s > 0 => (
+                TR.modify_fee__increase_fee,
+                user_fee_change,
+                TR.modify_fee__new_transaction_fee,
+            ),
             _ => (
-                "Fee did not change.\r",
+                TR.modify_fee__no_change,
                 StrBuffer::empty(),
-                "Transaction fee:",
+                TR.modify_fee__transaction_fee,
             ),
         };
 
@@ -913,7 +925,7 @@ fn new_show_modal(
 ) -> Result<Obj, Error> {
     let title: StrBuffer = kwargs.get(Qstr::MP_QSTR_title)?.try_into()?;
     let description: StrBuffer = kwargs.get_or(Qstr::MP_QSTR_description, StrBuffer::empty())?;
-    let button: StrBuffer = kwargs.get_or(Qstr::MP_QSTR_button, "CONTINUE".into())?;
+    let button: StrBuffer = kwargs.get_or(Qstr::MP_QSTR_button, TR.buttons__continue.into())?;
     let allow_cancel: bool = kwargs.get_or(Qstr::MP_QSTR_allow_cancel, true)?;
     let time_ms: u32 = kwargs.get_or(Qstr::MP_QSTR_time_ms, 0)?;
 
@@ -999,7 +1011,7 @@ extern "C" fn new_confirm_fido(n_args: usize, args: *const Obj, kwargs: *mut Map
 
         let controls = Button::cancel_confirm(
             Button::with_icon(theme::ICON_CANCEL),
-            Button::with_text("CONFIRM").styled(theme::button_confirm()),
+            Button::with_text(TR.buttons__confirm).styled(theme::button_confirm()),
             true,
         );
 
@@ -1055,10 +1067,10 @@ extern "C" fn new_show_info(n_args: usize, args: *const Obj, kwargs: *mut Map) -
 
 extern "C" fn new_show_mismatch() -> Obj {
     let block = move || {
-        let title: StrBuffer = "Address mismatch?".into();
-        let description: StrBuffer = "Please contact Trezor support at".into();
-        let url: StrBuffer = "trezor.io/support".into();
-        let button = "QUIT";
+        let title: StrBuffer = TR.addr_mismatch__mismatch.into();
+        let description: StrBuffer = TR.addr_mismatch__contact_support.into();
+        let url: StrBuffer = TR.addr_mismatch__support_url.into();
+        let button = TR.buttons__quit;
 
         let icon = BlendedImage::new(
             theme::IMAGE_BG_OCTAGON,
@@ -1201,15 +1213,15 @@ extern "C" fn new_confirm_coinjoin(n_args: usize, args: *const Obj, kwargs: *mut
         let max_feerate: StrBuffer = kwargs.get(Qstr::MP_QSTR_max_feerate)?.try_into()?;
 
         let paragraphs = Paragraphs::new([
-            Paragraph::new(&theme::TEXT_NORMAL, "Max rounds".into()),
+            Paragraph::new(&theme::TEXT_NORMAL, TR.coinjoin__max_rounds.into()),
             Paragraph::new(&theme::TEXT_MONO, max_rounds),
-            Paragraph::new(&theme::TEXT_NORMAL, "Max mining fee".into()),
+            Paragraph::new(&theme::TEXT_NORMAL, TR.coinjoin__max_mining_fee.into()),
             Paragraph::new(&theme::TEXT_MONO, max_feerate),
         ]);
 
         let obj = LayoutObj::new(Frame::left_aligned(
             theme::label_title(),
-            "AUTHORIZE COINJOIN",
+            TR.coinjoin__title,
             SwipeHoldPage::new(paragraphs, theme::BG),
         ))?;
         Ok(obj.into())
@@ -1224,7 +1236,7 @@ extern "C" fn new_request_pin(n_args: usize, args: *const Obj, kwargs: *mut Map)
         let allow_cancel: bool = kwargs.get_or(Qstr::MP_QSTR_allow_cancel, true)?;
         let warning: bool = kwargs.get_or(Qstr::MP_QSTR_wrong_pin, false)?;
         let warning = if warning {
-            Some("Wrong PIN".into())
+            Some(TR.pin__wrong_pin.into())
         } else {
             None
         };
@@ -1389,9 +1401,9 @@ extern "C" fn new_confirm_recovery(n_args: usize, args: *const Obj, kwargs: *mut
         .with_spacing(theme::RECOVERY_SPACING);
 
         let notification = if dry_run {
-            "BACKUP CHECK"
+            TR.recovery__title_dry_run
         } else {
-            "RECOVER WALLET"
+            TR.recovery__title
         };
 
         let obj = if info_button {
@@ -1400,7 +1412,7 @@ extern "C" fn new_confirm_recovery(n_args: usize, args: *const Obj, kwargs: *mut
                 notification,
                 Dialog::new(
                     paragraphs,
-                    Button::cancel_info_confirm("CONTINUE", "MORE INFO"),
+                    Button::cancel_info_confirm(TR.buttons__continue, TR.buttons__more_info),
                 ),
             ))?
         } else {
@@ -1419,14 +1431,14 @@ extern "C" fn new_select_word_count(n_args: usize, args: *const Obj, kwargs: *mu
     let block = move |_args: &[Obj], kwargs: &Map| {
         let dry_run: bool = kwargs.get(Qstr::MP_QSTR_dry_run)?.try_into()?;
         let title = if dry_run {
-            "BACKUP CHECK"
+            TR.recovery__title_dry_run
         } else {
-            "RECOVER WALLET"
+            TR.recovery__title
         };
 
         let paragraphs = Paragraphs::new(Paragraph::new(
             &theme::TEXT_DEMIBOLD,
-            StrBuffer::from("Select the number of words in your backup."),
+            StrBuffer::from(TR.recovery__select_num_of_words),
         ));
 
         let obj = LayoutObj::new(Frame::left_aligned(
@@ -1450,7 +1462,7 @@ extern "C" fn new_show_group_share_success(
 
         let obj = LayoutObj::new(IconDialog::new_shares(
             lines,
-            theme::button_bar(Button::with_text("CONTINUE").map(|msg| {
+            theme::button_bar(Button::with_text(TR.buttons__continue).map(|msg| {
                 (matches!(msg, ButtonMsg::Clicked)).then(|| CancelConfirmMsg::Confirmed)
             })),
         ))?;
@@ -1473,10 +1485,10 @@ extern "C" fn new_show_remaining_shares(n_args: usize, args: *const Obj, kwargs:
 
         let obj = LayoutObj::new(Frame::left_aligned(
             theme::label_title(),
-            "REMAINING SHARES",
+            TR.recovery__title_remaining_shares,
             SwipePage::new(
                 paragraphs.into_paragraphs(),
-                theme::button_bar(Button::with_text("CONTINUE").map(|msg| {
+                theme::button_bar(Button::with_text(TR.buttons__continue).map(|msg| {
                     (matches!(msg, ButtonMsg::Clicked)).then(|| CancelConfirmMsg::Confirmed)
                 })),
                 theme::BG,

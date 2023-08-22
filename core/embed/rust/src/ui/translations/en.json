@@ -41,19 +41,23 @@
         "increase_fee": "Increase fee by:",
         "no_change": "Your fee did not change.",
         "transaction_fee": "Transaction fee:",
+        "new_transaction_fee": "New transaction fee:",
         "fee_rate": "Fee rate:"
     },
     "confirm_total": {
         "title_fee": "FEE INFORMATION",
+        "title_information": "INFORMATION",
         "fee_rate": "Fee rate:",
         "title_sending_from": "SENDING FROM",
-        "account": "Account:"
+        "account": "Account:",
+        "sending_from_account": "Sending from account:"
     },
     "passphrase": {
         "please_enter": "Please enter your passphrase."
     },
     "addr_mismatch": {
         "title": "ADDRESS MISMATCH?",
+        "mismatch": "Address mismatch?",
         "contact_support": "Please contact Trezor support at",
         "support_url": "trezor.io/support"
     },
@@ -62,22 +66,34 @@
         "max_rounds": "Max rounds:",
         "max_mining_fee": "Max mining fee:",
         "title_progress": "COINJOIN IN PROGRESS",
+        "title_do_not_disconnect": "DO NOT DISCONNECT YOUR TREZOR!",
         "do_not_disconnect": "Do not disconnect your Trezor!"
     },
     "recovery": {
         "title": "RECOVER WALLET",
         "title_dry_run": "BACKUP CHECK",
+        "title_remaining_shares": "REMAINING SHARES",
         "only_first_letters": "You'll only have to select the first 2-3 letters of each word.",
-        "cursor_will_change": "Position of the cursor will change between entries for enhanced security."
+        "cursor_will_change": "Position of the cursor will change between entries for enhanced security.",
+        "select_num_of_words": "Select the number of words in your backup."
     },
     "address_details": {
+        "title_receive_address": "RECEIVE ADDRESS",
+        "title_receiving_to": "RECEIVING TO",
         "account": "Account:",
         "derivation_path": "Derivation path:"
     },
     "homescreen": {
         "title_no_usb_connection": "NO USB CONNECTION",
+        "title_hold_to_lock": "HOLD TO LOCK",
         "click_to_connect": "Click to Connect",
         "click_to_unlock": "Click to Unlock"
+    },
+    "lockscreen": {
+        "title_not_connected": "NOT CONNECTED",
+        "title_locked": "LOCKED",
+        "tap_to_connect": "Tap to connect",
+        "tap_to_unlock": "Tap to unlock"
     },
     "word_count": {
         "title": "NUMBER OF WORDS"
@@ -95,7 +111,12 @@
         "again": "AGAIN",
         "view_full": "VIEW FULL",
         "back_up": "BACK UP",
+        "more_info": "MORE INFO",
+        "info": "INFO",
         "continue": "CONTINUE"
+    },
+    "pin": {
+        "wrong_pin": "Wrong PIN"
     },
     "inputs": {
         "enter": "ENTER",

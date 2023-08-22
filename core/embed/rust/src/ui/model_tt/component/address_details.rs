@@ -9,6 +9,7 @@ use crate::{
             Component, Event, EventCtx, Paginate, Qr,
         },
         geometry::Rect,
+        translations::TRANSLATIONS as TR,
     },
 };
 
@@ -40,27 +41,30 @@ where
     {
         let mut para = ParagraphVecShort::new();
         if let Some(a) = account {
-            para.add(Paragraph::new(&theme::TEXT_NORMAL, "Account:".into()));
+            para.add(Paragraph::new(
+                &theme::TEXT_NORMAL,
+                TR.address_details__account.into(),
+            ));
             para.add(Paragraph::new(&theme::TEXT_MONO, a));
         }
         if let Some(p) = path {
             para.add(Paragraph::new(
                 &theme::TEXT_NORMAL,
-                "Derivation path:".into(),
+                TR.address_details__derivation_path.into(),
             ));
             para.add(Paragraph::new(&theme::TEXT_MONO, p));
         }
         let result = Self {
             qr_code: Frame::left_aligned(
                 theme::label_title(),
-                "RECEIVE ADDRESS".into(),
+                TR.address_details__title_receive_address.into(),
                 Qr::new(qr_address, case_sensitive)?.with_border(7),
             )
             .with_cancel_button()
             .with_border(theme::borders_horizontal_scroll()),
             details: Frame::left_aligned(
                 theme::label_title(),
-                "RECEIVING TO".into(),
+                TR.address_details__title_receiving_to.into(),
                 para.into_paragraphs(),
             )
             .with_cancel_button()

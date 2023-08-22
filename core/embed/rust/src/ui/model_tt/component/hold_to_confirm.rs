@@ -3,6 +3,7 @@ use crate::{
     ui::{
         component::{Child, Component, ComponentExt, Event, EventCtx, FixedHeightBar, Pad},
         geometry::{Grid, Insets, Rect},
+        translations::TRANSLATIONS as TR,
         util::animation_disabled,
     },
 };
@@ -127,7 +128,7 @@ impl CancelHold {
     pub fn new(button_style: ButtonStyleSheet) -> FixedHeightBar<Self> {
         theme::button_bar(Self {
             cancel: Some(Button::with_icon(theme::ICON_CANCEL).into_child()),
-            hold: Button::with_text("HOLD TO CONFIRM")
+            hold: Button::with_text(TR.buttons__hold_to_confirm)
                 .styled(button_style)
                 .into_child(),
         })
@@ -136,7 +137,7 @@ impl CancelHold {
     pub fn without_cancel() -> FixedHeightBar<Self> {
         theme::button_bar(Self {
             cancel: None,
-            hold: Button::with_text("HOLD TO CONFIRM")
+            hold: Button::with_text(TR.buttons__hold_to_confirm)
                 .styled(theme::button_confirm())
                 .into_child(),
         })
