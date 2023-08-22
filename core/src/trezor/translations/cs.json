@@ -63,9 +63,9 @@
         "advanced_group_threshold_info": "Prah skupiny určuje počet skupin potřebných k obnovení vaší peněženky.",
         "all_x_of_y_template": "všechny {} z {} podílů",
         "any_x_of_y_template": "libovolný {} z {} podílů",
-        "check_group_share_title_template": "ZKONTROLOVAT G{} - PODÍL {}",
+        "check_group_share_title_template": "KONTROLA G{} - PODÍL {}",
         "check_seed_title": "ZKONTROLOVAT SEED",
-        "check_share_title_template": "ZKONTROLOVAT PODÍL #{}",
+        "check_share_title_template": "KONTROLA PODÍL #{}",
         "group_description": "Skupina se skládá z obnovovacích podílů.",
         "group_info": "Každá skupina má stanovený počet podílů a vlastní práh. V dalších krocích nastavíte počty podílů a prahy.",
         "group_share_title_template": "SKUPINA {} - PODÍL {}",
@@ -135,7 +135,7 @@
         "want_to_skip": "Jste si jisti, že chcete přeskočit zálohu?",
         "can_back_up_anytime": "Svůj Trezor můžete zálohovat jednou, kdykoli.",
         "it_should_be_backed_up": "Měli byste nyní zálohovat svou novou peněženku.",
-        "new_wallet_created": "Nová peněženka úspěšně vytvořena."
+        "new_wallet_successfully_created": "Nová peněženka úspěšně vytvořena."
     },
     "homescreen": {
         "title_coinjoin_authorized": "COINJOIN AUTORIZOVÁNO",

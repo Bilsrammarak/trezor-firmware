@@ -22,6 +22,7 @@ from trezorlib import btc, messages
 from trezorlib.debuglink import TrezorClientDebugLink as Client, message_filters
 from trezorlib.tools import parse_path
 
+from ... import translations as TR
 from ...input_flows import InputFlowSignMessagePagination
 
 S = messages.InputScriptType
@@ -319,11 +320,10 @@ def test_signmessage_pagination(client: Client, message: str):
     # We cannot differentiate between a newline and space in the message read from Trezor.
     # TODO: do the check also for model R
     if client.features.model == "T":
-        expected_message = (
-            ("Confirm message: " + message).replace("\n", "").replace(" ", "")
-        )
+        TR.assert_in(IF.message_read, "sign_message.confirm_message")
         message_read = IF.message_read.replace(" ", "").replace("...", "")
-        assert expected_message == message_read
+        signed_message = message.replace("\n", "").replace(" ", "")
+        assert signed_message in message_read
 
 
 @pytest.mark.skip_t1

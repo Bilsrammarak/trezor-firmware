@@ -330,7 +330,7 @@ async def prompt_backup() -> bool:
         RustLayout(
             trezorui2.confirm_action(
                 title=TR.words__success.upper(),
-                action=TR.backup__new_wallet_created,
+                action=TR.backup__new_wallet_successfully_created,
                 description=TR.backup__it_should_be_backed_up,
                 verb=TR.buttons__back_up,
                 verb_cancel=TR.buttons__skip,

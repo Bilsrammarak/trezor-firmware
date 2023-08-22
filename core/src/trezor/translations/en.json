@@ -132,7 +132,7 @@
     },
     "backup": {
         "title_skip": "SKIP BACKUP",
-        "new_wallet_created": "New wallet created successfully.",
+        "new_wallet_successfully_created": "New wallet created successfully.",
         "it_should_be_backed_up": "You should back up your new wallet right now.",
         "can_back_up_anytime": "You can back up your Trezor once, at any time.",
         "want_to_skip": "Are you sure you want to skip the backup?"

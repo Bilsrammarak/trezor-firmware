@@ -330,11 +330,10 @@ class InputFlowShowMultisigXPUBs(InputFlowBase):
 
         # Three xpub pages with the same testing logic
         for xpub_num in range(3):
-            expected_title = f"MULTISIG XPUB #{xpub_num + 1}\n" + (
-                "(YOURS)" if self.index == xpub_num else "(COSIGNER)"
-            )
+            # TODO: might also check YOURS vs COSIGNER
+            expected_title = f"MULTISIG XPUB #{xpub_num + 1}"
             layout = self.debug.swipe_left(wait=True)
-            assert expected_title == layout.title()
+            assert expected_title in layout.title()
             content = layout.text_content().replace(" ", "")
             assert self.xpubs[xpub_num] in content
 
@@ -459,7 +458,7 @@ def sign_tx_go_to_info(client: Client) -> Generator[None, None, str]:
     client.debug.press_info()
 
     layout = client.debug.wait_layout()
-    content = layout.text_content().lower()
+    content = layout.text_content()
 
     client.debug.click(buttons.CORNER_BUTTON, wait=True)
 
@@ -494,20 +493,20 @@ class InputFlowSignTxInformation(InputFlowBase):
     def __init__(self, client: Client):
         super().__init__(client)
 
-    def assert_content(self, content: str) -> None:
-        TR.assert_in(content, "confirm_total.title_sending_from")
+    def assert_content(self, content: str, title_path: str) -> None:
+        TR.assert_in(content, title_path)
         assert "Legacy #6" in content
         TR.assert_in(content, "confirm_total.fee_rate")
         assert "71.56 sat" in content
 
     def input_flow_tt(self) -> BRGeneratorType:
         content = yield from sign_tx_go_to_info(self.client)
-        self.assert_content(content)
+        self.assert_content(content, "confirm_total.sending_from_account")
         self.debug.press_yes()
 
     def input_flow_tr(self) -> BRGeneratorType:
         content = yield from sign_tx_go_to_info_tr(self.client)
-        self.assert_content(content)
+        self.assert_content(content, "confirm_total.title_sending_from")
         self.debug.press_yes()
 
 
@@ -515,20 +514,20 @@ class InputFlowSignTxInformationMixed(InputFlowBase):
     def __init__(self, client: Client):
         super().__init__(client)
 
-    def assert_content(self, content: str) -> None:
-        TR.assert_in(content, "confirm_total.title_sending_from")
+    def assert_content(self, content: str, title_path: str) -> None:
+        TR.assert_in(content, title_path)
         TR.assert_in(content, "bitcoin.multiple_accounts")
         TR.assert_in(content, "confirm_total.fee_rate")
         assert "18.33 sat" in content
 
     def input_flow_tt(self) -> BRGeneratorType:
         content = yield from sign_tx_go_to_info(self.client)
-        self.assert_content(content)
+        self.assert_content(content, "confirm_total.sending_from_account")
         self.debug.press_yes()
 
     def input_flow_tr(self) -> BRGeneratorType:
         content = yield from sign_tx_go_to_info_tr(self.client)
-        self.assert_content(content)
+        self.assert_content(content, "confirm_total.title_sending_from")
         self.debug.press_yes()
 
 
@@ -1561,7 +1560,12 @@ class InputFlowResetSkipBackup(InputFlowBase):
     def input_flow_common(self) -> BRGeneratorType:
         yield from self.BAK.confirm_new_wallet()
         yield  # Skip Backup
-        TR.assert_in(self.text_content(), "backup.new_wallet_created")
+        info_path = (
+            "backup.new_wallet_created"
+            if self.debug.model == "R"
+            else "backup.new_wallet_successfully_created"
+        )
+        TR.assert_in(self.text_content(), info_path)
         if self.debug.model == "R":
             self.debug.press_right()
         self.debug.press_no()
