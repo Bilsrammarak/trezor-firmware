@@ -114,7 +114,7 @@ class Glyph:
         # the following code is here just for some letters (listed below)
         # not using negative bearingX makes life so much easier; add it to advance instead
         if bearingX < 0:
-            if c in "AXYjxy}),/_":
+            if c in "ÝÁýAXYjxy}),/_":
                 advance += -bearingX
                 bearingX = 0
             else:
