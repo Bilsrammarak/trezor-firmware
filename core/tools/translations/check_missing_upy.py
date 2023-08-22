@@ -7,9 +7,11 @@ from typing import Any
 
 
 HERE = Path(__file__).parent
-ROOT = HERE.parent.parent
-CORE_SRC = ROOT / "core" / "src"
+CORE = HERE.parent.parent
+CORE_SRC = CORE / "src"
 KEY_PREFIX = ""
+
+MAPPING_FILE = HERE / "mapping_upy.json"
 
 
 def find_all_strings(filename: str | Path) -> list[str]:
@@ -220,12 +222,8 @@ def check_folder_resursive_report(
 
 
 def report_all_files(all_files: dict[str, list[str]]) -> None:
-    for file, strings in all_files.items():
-        print(f"{file}:")
-        for string in strings:
-            print(f"    {string}")
     str_mapping: dict[str, str] = {}
-    for file, strings in all_files.items():
+    for _file, strings in all_files.items():
         for string in strings:
             if "_" in string:
                 continue
@@ -240,13 +238,7 @@ def report_all_files(all_files: dict[str, list[str]]) -> None:
             if KEY_PREFIX:
                 str_id = f"{KEY_PREFIX}__{str_id}"
             str_mapping[str_id] = string
-    print()
-    print("String mapping:")
-    for str_id, string in str_mapping.items():
-        print(f"    {str_id}: {string}")
-
-    with open("mapping.json", "w") as f:
-        json.dump(str_mapping, f, indent=4)
+    MAPPING_FILE.write_text(json.dumps(str_mapping, indent=4))
 
 
 if __name__ == "__main__":
@@ -263,17 +255,11 @@ if __name__ == "__main__":
         "messages.py",
     ]
 
-    # folder = CORE_SRC / "apps" / "stellar"
-    # folder = CORE_SRC / "apps" / "nem"
     # folder = CORE_SRC / "apps"
     # folder = CORE_SRC / "trezor"
     folder = CORE_SRC
     check_folder_resursive_report(folder, ignore_files=ignore_files)
 
-    # file = CORE_SRC / "apps" / "common" / "seed.py"
-    # file = CORE_SRC / "apps" / "ethereum" / "sign_typed_data.py"
-    # file = CORE_SRC / "trezor" / "crypto" / "bech32.py"
-    # file = CORE_SRC / "trezor" / "crypto" / "slip39.py"
     # file = CORE_SRC / "trezor/ui/layouts/tt_v2/reset.py"
     # KEY_PREFIX = "TR.reset"  # type: ignore
     # check_file_report(file)

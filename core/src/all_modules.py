@@ -151,8 +151,6 @@ trezor.translations.cs
 import trezor.translations.cs
 trezor.translations.en
 import trezor.translations.en
-trezor.translations.validate
-import trezor.translations.validate
 trezor.ui
 import trezor.ui
 trezor.ui.layouts
