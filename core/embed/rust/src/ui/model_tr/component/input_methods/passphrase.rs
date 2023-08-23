@@ -332,8 +332,8 @@ where
     }
 
     fn event(&mut self, ctx: &mut EventCtx, event: Event) -> Option<Self::Msg> {
-        // Any event when showing real passphrase should hide it
-        if self.show_plain_passphrase {
+        // Any non-timer event when showing real passphrase should hide it
+        if self.show_plain_passphrase && !matches!(event, Event::Timer(_)) {
             self.show_plain_passphrase = false;
             self.update_passphrase_dots(ctx);
         }

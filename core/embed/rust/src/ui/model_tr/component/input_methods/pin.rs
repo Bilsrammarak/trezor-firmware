@@ -177,15 +177,17 @@ where
     }
 
     fn event(&mut self, ctx: &mut EventCtx, event: Event) -> Option<Self::Msg> {
-        // Any event when showing real PIN should hide it
+        // Any non-timer event when showing real PIN should hide it
         // Same with showing last digit
-        if self.show_real_pin {
-            self.show_real_pin = false;
-            self.update(ctx)
-        }
-        if self.show_last_digit {
-            self.show_last_digit = false;
-            self.update(ctx)
+        if !matches!(event, Event::Timer(_)) {
+            if self.show_real_pin {
+                self.show_real_pin = false;
+                self.update(ctx)
+            }
+            if self.show_last_digit {
+                self.show_last_digit = false;
+                self.update(ctx)
+            }
         }
 
         match self.choice_page.event(ctx, event) {

@@ -3,8 +3,9 @@ use super::{
 };
 use crate::{
     strutil::StringType,
+    time::Duration,
     ui::{
-        component::{base::Event, Component, EventCtx, Pad},
+        component::{base::Event, Component, EventCtx, Pad, TimerToken},
         event::{ButtonEvent, PhysicalButton},
         geometry::Rect,
     },
@@ -240,6 +241,14 @@ where
         self.right_btn.set_pressed(ctx, right);
     }
 
+    pub fn highlight_button(&mut self, ctx: &mut EventCtx, pos: ButtonPos) {
+        match pos {
+            ButtonPos::Left => self.left_btn.set_pressed(ctx, true),
+            ButtonPos::Middle => self.middle_btn.set_pressed(ctx, true),
+            ButtonPos::Right => self.right_btn.set_pressed(ctx, true),
+        }
+    }
+
     /// Handle middle button hold-to-confirm start.
     /// We need to cancel possible holds in both other buttons.
     fn middle_hold_started(&mut self, ctx: &mut EventCtx) {
@@ -421,6 +430,91 @@ where
     }
 }
 
+/// Component allowing for automatically moving through items (e.g. Choice
+/// items).
+///
+/// Users are in full control of starting/stopping the movement.
+///
+/// Can be started e.g. by holding left/right button.
+pub struct AutomaticMover {
+    /// For requesting timer events repeatedly
+    timer_token: Option<TimerToken>,
+    /// Which direction should we go (which button is down)
+    moving_direction: Option<ButtonPos>,
+    /// How many screens were moved automatically
+    auto_moved_screens: usize,
+}
+
+impl AutomaticMover {
+    pub fn new() -> Self {
+        Self {
+            timer_token: None,
+            moving_direction: None,
+            auto_moved_screens: 0,
+        }
+    }
+
+    /// Determines how long to wait between automatic movements.
+    /// Moves quicker with increasing number of screens moved.
+    fn get_auto_move_duration(&self) -> Duration {
+        // TODO: decide on the logic here, make it adjustable
+        if self.auto_moved_screens == 0 {
+            Duration::from_millis(700)
+        } else if self.auto_moved_screens < 3 {
+            Duration::from_millis(500)
+        } else if self.auto_moved_screens < 10 {
+            Duration::from_millis(300)
+        } else {
+            Duration::from_millis(100)
+        }
+    }
+
+    /// In which direction we are moving, if any
+    pub fn moving_direction(&self) -> Option<ButtonPos> {
+        self.moving_direction
+    }
+
+    /// Whether we have done at least one automatic movement.
+    pub fn was_moving(&self) -> bool {
+        self.auto_moved_screens > 0
+    }
+
+    pub fn start_moving(&mut self, ctx: &mut EventCtx, button: ButtonPos) {
+        self.auto_moved_screens = 0;
+        self.moving_direction = Some(button);
+        self.timer_token = Some(ctx.request_timer(self.get_auto_move_duration()));
+    }
+
+    pub fn stop_moving(&mut self) {
+        self.moving_direction = None;
+        self.timer_token = None;
+    }
+}
+
+impl Component for AutomaticMover {
+    type Msg = ButtonPos;
+
+    fn place(&mut self, bounds: Rect) -> Rect {
+        bounds
+    }
+
+    fn paint(&mut self) {}
+
+    fn event(&mut self, ctx: &mut EventCtx, event: Event) -> Option<Self::Msg> {
+        // Moving automatically only when we receive a TimerToken that we have
+        // requested before
+        if let Event::Timer(token) = event {
+            if self.timer_token == Some(token) && self.moving_direction.is_some() {
+                // Request new token and send the appropriate button trigger event
+                self.timer_token = Some(ctx.request_timer(self.get_auto_move_duration()));
+                self.auto_moved_screens += 1;
+                return self.moving_direction;
+            }
+        }
+        None
+    }
+}
+
 // DEBUG-ONLY SECTION BELOW
 
 #[cfg(feature = "ui_debug")]
@@ -441,5 +535,12 @@ impl<T: StringType> crate::trace::Trace for ButtonController<T> {
         t.child("left_btn", &self.left_btn);
         t.child("middle_btn", &self.middle_btn);
         t.child("right_btn", &self.right_btn);
+    }
+}
+
+#[cfg(feature = "ui_debug")]
+impl crate::trace::Trace for AutomaticMover {
+    fn trace(&self, t: &mut dyn crate::trace::Tracer) {
+        t.component("AutomaticMover");
     }
 }
