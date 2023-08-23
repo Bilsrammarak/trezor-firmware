@@ -281,6 +281,25 @@ message FirmwareHash {
 }
 
 /**
+ * Request: Request a signature of the provided challenge.
+ * @start
+ * @next AuthenticityProof
+ * @next Failure
+ */
+message AuthenticateDevice {
+    required bytes challenge = 1;  // A random challenge to sign.
+}
+
+/**
+ * Response: Signature of the provided challenge along with a certificate issued by the Trezor company.
+ * @end
+ */
+message AuthenticityProof {
+    required bytes certificate = 1;  // Certificate signed by the Trezor company, containing the public key that can be used to verify the challenge signature.
+    required bytes signature = 2;    // A DER-encoded signature of "\0x13AuthenticateDevice:" + length-prefixed challenge.
+}
+
+/**
  * Request: Request device to wipe all sensitive data and settings
  * @start
  * @next Success

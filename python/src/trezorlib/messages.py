@@ -73,6 +73,8 @@ class MessageType(IntEnum):
     UnlockedPathRequest = 94
     ShowDeviceTutorial = 95
     UnlockBootloader = 96
+    AuthenticateDevice = 97
+    AuthenticityProof = 98
     SetU2FCounter = 63
     GetNextU2FCounter = 80
     NextU2FCounter = 81
@@ -3464,6 +3466,37 @@ class FirmwareHash(protobuf.MessageType):
         hash: "bytes",
     ) -> None:
         self.hash = hash
+
+
+class AuthenticateDevice(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 97
+    FIELDS = {
+        1: protobuf.Field("challenge", "bytes", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        challenge: "bytes",
+    ) -> None:
+        self.challenge = challenge
+
+
+class AuthenticityProof(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 98
+    FIELDS = {
+        1: protobuf.Field("certificate", "bytes", repeated=False, required=True),
+        2: protobuf.Field("signature", "bytes", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        certificate: "bytes",
+        signature: "bytes",
+    ) -> None:
+        self.certificate = certificate
+        self.signature = signature
 
 
 class WipeDevice(protobuf.MessageType):
