@@ -80,6 +80,7 @@ SOURCE_MOD += [
     'embed/extmod/modtrezorcrypto/rand.c',
     'vendor/trezor-crypto/address.c',
     'vendor/trezor-crypto/aes/aes_modes.c',
+    'vendor/trezor-crypto/aes/aesccm.c',
     'vendor/trezor-crypto/aes/aescrypt.c',
     'vendor/trezor-crypto/aes/aeskey.c',
     'vendor/trezor-crypto/aes/aestab.c',
@@ -127,6 +128,7 @@ SOURCE_MOD += [
     'vendor/trezor-crypto/shamir.c',
     'vendor/trezor-crypto/slip39.c',
     'vendor/trezor-crypto/slip39_english.c',
+    'vendor/trezor-crypto/tls_prf.c',
 ]
 if EVERYTHING:
     SOURCE_MOD += [
