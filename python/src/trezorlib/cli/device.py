@@ -331,3 +331,14 @@ def set_busy(
         )
 
     return device.set_busy(client, expiry * 1000)
+
+
+@cli.command()
+@click.argument("hex_challenge", required=True)
+@with_client
+def authenticate(client: "TrezorClient", hex_challenge: str) -> None:
+    """Get information to verify the authenticity of the device."""
+    challenge = bytes.fromhex(hex_challenge)
+    msg = device.authenticate(client, challenge)
+    click.echo(f"Signature of challenge: {msg.signature.hex()}")
+    click.echo(f"Certificate: {msg.certificate.hex()}")
