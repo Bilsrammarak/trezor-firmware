@@ -206,7 +206,7 @@ where
                 self.textbox.append(ctx, ch);
                 // Choosing random digit to be shown next
                 self.choice_page
-                    .set_page_counter(ctx, get_random_digit_position());
+                    .set_page_counter(ctx, get_random_digit_position(), true);
                 self.show_last_digit = true;
                 self.update(ctx);
                 None

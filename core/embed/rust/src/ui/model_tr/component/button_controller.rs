@@ -443,6 +443,10 @@ pub struct AutomaticMover {
     moving_direction: Option<ButtonPos>,
     /// How many screens were moved automatically
     auto_moved_screens: usize,
+    /// Optional Duration that is always constant
+    constant_duration: Option<Duration>,
+    /// Optional Duration that will apply on the first movement
+    initial_duration: Option<Duration>,
 }
 
 impl AutomaticMover {
@@ -451,12 +455,39 @@ impl AutomaticMover {
             timer_token: None,
             moving_direction: None,
             auto_moved_screens: 0,
+            constant_duration: None,
+            initial_duration: None,
         }
+    }
+
+    /// Setting the constant duration for each movement.
+    pub fn with_constant_duration(mut self, duration_ms: u32) -> Self {
+        self.constant_duration = Some(Duration::from_millis(duration_ms));
+        self
+    }
+
+    /// Setting the duration for the first movement.
+    pub fn with_initial_duration(mut self, duration_ms: u32) -> Self {
+        self.initial_duration = Some(Duration::from_millis(duration_ms));
+        self
     }
 
     /// Determines how long to wait between automatic movements.
     /// Moves quicker with increasing number of screens moved.
+    /// Can be forced to be always the same (e.g. for animation purposes).
     fn get_auto_move_duration(&self) -> Duration {
+        // Possible hardcoded first movement
+        if let Some(duration) = self.initial_duration {
+            if self.auto_moved_screens == 0 {
+                return duration;
+            }
+        }
+
+        // Possible possible constant duration
+        if let Some(duration) = self.constant_duration {
+            return duration;
+        }
+
         // TODO: decide on the logic here, make it adjustable
         if self.auto_moved_screens == 0 {
             Duration::from_millis(700)
@@ -472,6 +503,11 @@ impl AutomaticMover {
     /// In which direction we are moving, if any
     pub fn moving_direction(&self) -> Option<ButtonPos> {
         self.moving_direction
+    }
+
+    // Whether we are currently moving.
+    pub fn is_moving(&self) -> bool {
+        self.moving_direction.is_some()
     }
 
     /// Whether we have done at least one automatic movement.
