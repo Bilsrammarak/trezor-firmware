@@ -577,7 +577,7 @@ int process_msg_FirmwareUpload(uint8_t iface_num, uint32_t msg_size,
       if (sectrue != secret_wiped() && ((vhdr.vtrust & VTRUST_SECRET) != 0)) {
         MSG_SEND_INIT(Failure);
         MSG_SEND_ASSIGN_VALUE(code, FailureType_Failure_ProcessError);
-        MSG_SEND_ASSIGN_STRING(message, "Attestation present");
+        MSG_SEND_ASSIGN_STRING(message, "Bootloader locked");
         MSG_SEND(Failure);
         return UPLOAD_ERR_ATTESTATION_PRESENT;
       }
