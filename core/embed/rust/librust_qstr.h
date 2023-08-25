@@ -35,6 +35,7 @@ static void _librust_qstrs(void) {
   MP_QSTR_button;
   MP_QSTR_button_event;
   MP_QSTR_case_sensitive;
+  MP_QSTR_chunkify;
   MP_QSTR_confirm_action;
   MP_QSTR_confirm_address;
   MP_QSTR_confirm_backup;

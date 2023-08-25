@@ -76,6 +76,10 @@ pub struct TextStyle {
     pub line_breaking: LineBreaking,
     /// Specifies what to do at the end of the page.
     pub page_breaking: PageBreaking,
+
+    /// Optionally chunkify all the text with a specified chunk
+    /// size and pixel offset for the next chunk.
+    pub chunks: Option<(usize, i16)>,
 }
 
 impl TextStyle {
@@ -96,6 +100,7 @@ impl TextStyle {
             prev_page_ellipsis_icon: None,
             line_breaking: LineBreaking::BreakAtWhitespace,
             page_breaking: PageBreaking::CutAndInsertEllipsis,
+            chunks: None,
         }
     }
 
@@ -118,6 +123,12 @@ impl TextStyle {
     /// Adding optional icon signalling content continues from previous page.
     pub const fn with_prev_page_icon(mut self, icon: Icon, margin: i16) -> Self {
         self.prev_page_ellipsis_icon = Some((icon, margin));
+        self
+    }
+
+    /// Adding optional chunkification to the text.
+    pub const fn with_chunks(mut self, chunk_size: usize, x_offset: i16) -> Self {
+        self.chunks = Some((chunk_size, x_offset));
         self
     }
 
@@ -226,6 +237,7 @@ impl TextLayout {
                 self.style.text_font,
                 self.style.line_breaking,
                 line_ending_space,
+                self.style.chunks,
             );
 
             cursor.x += match self.align {
@@ -488,6 +500,7 @@ impl Span {
         text_font: impl GlyphMetrics,
         breaking: LineBreaking,
         line_ending_space: i16,
+        chunks: Option<(usize, i16)>,
     ) -> Self {
         const ASCII_LF: char = '\n';
         const ASCII_CR: char = '\r';
@@ -543,6 +556,16 @@ impl Span {
         // loop.
         while let Some((i, ch)) = char_indices_iter.next() {
             let char_width = text_font.char_width(ch);
+
+            // When there is a set chunk size and we reach it,
+            // adjust the line advances and return the line.
+            if let Some((chunk_size, x_offset)) = chunks {
+                if i == chunk_size {
+                    line.advance.y = 0;
+                    line.advance.x += x_offset;
+                    return line;
+                }
+            }
 
             // Consider if we could be breaking the line at this position.
             if is_whitespace(ch) && span_width + complete_word_end_width <= max_width {
@@ -679,6 +702,7 @@ mod tests {
                 FIXED_FONT,
                 LineBreaking::BreakAtWhitespace,
                 0,
+                None,
             );
             spans.push((
                 &remaining_text[..span.length],

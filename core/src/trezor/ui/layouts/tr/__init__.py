@@ -493,19 +493,14 @@ async def show_address(
         if multisig_index is not None
         else "RECEIVE ADDRESS"
     )
-    if chunkify:
-        # Converting the address into chunks with 4 characters each.
-        # NOTE: need to preserve the original address as it is shown in QR code
-        address_to_show = " ".join(address[i : i + 4] for i in range(0, len(address), 4))
-    else:
-        address_to_show = address
     while True:
         layout = RustLayout(
             trezorui2.confirm_address(
                 title=title,
-                data=address_to_show,
+                data=address,
                 description="",  # unused on TR
                 extra=None,  # unused on TR
+                chunkify=chunkify,
             )
         )
         if send_button_request:

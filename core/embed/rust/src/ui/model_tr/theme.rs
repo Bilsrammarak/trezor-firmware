@@ -35,6 +35,7 @@ pub const TEXT_MONO: TextStyle = TextStyle::new(Font::MONO, FG, BG, FG, FG)
 /// Mono data text does not have hyphens
 pub const TEXT_MONO_DATA: TextStyle =
     TEXT_MONO.with_line_breaking(LineBreaking::BreakWordsNoHyphen);
+pub const TEXT_MONO_ADDRESS_CHUNKS: TextStyle = TEXT_MONO_DATA.with_chunks(4, 4);
 
 /// Convert Python-side numeric id to a `TextStyle`.
 /// Using only BOLD or MONO fonts.
