@@ -1042,6 +1042,7 @@ class GetAddress(protobuf.MessageType):
         4: protobuf.Field("multisig", "MultisigRedeemScriptType", repeated=False, required=False, default=None),
         5: protobuf.Field("script_type", "InputScriptType", repeated=False, required=False, default=InputScriptType.SPENDADDRESS),
         6: protobuf.Field("ignore_xpub_magic", "bool", repeated=False, required=False, default=None),
+        7: protobuf.Field("chunkify", "bool", repeated=False, required=False, default=True),
     }
 
     def __init__(
@@ -1053,6 +1054,7 @@ class GetAddress(protobuf.MessageType):
         multisig: Optional["MultisigRedeemScriptType"] = None,
         script_type: Optional["InputScriptType"] = InputScriptType.SPENDADDRESS,
         ignore_xpub_magic: Optional["bool"] = None,
+        chunkify: Optional["bool"] = True,
     ) -> None:
         self.address_n: Sequence["int"] = address_n if address_n is not None else []
         self.coin_name = coin_name
@@ -1060,6 +1062,7 @@ class GetAddress(protobuf.MessageType):
         self.multisig = multisig
         self.script_type = script_type
         self.ignore_xpub_magic = ignore_xpub_magic
+        self.chunkify = chunkify
 
 
 class Address(protobuf.MessageType):

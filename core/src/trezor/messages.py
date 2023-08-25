@@ -461,6 +461,7 @@ if TYPE_CHECKING:
         multisig: "MultisigRedeemScriptType | None"
         script_type: "InputScriptType"
         ignore_xpub_magic: "bool | None"
+        chunkify: "bool"
 
         def __init__(
             self,
@@ -471,6 +472,7 @@ if TYPE_CHECKING:
             multisig: "MultisigRedeemScriptType | None" = None,
             script_type: "InputScriptType | None" = None,
             ignore_xpub_magic: "bool | None" = None,
+            chunkify: "bool | None" = None,
         ) -> None:
             pass
 

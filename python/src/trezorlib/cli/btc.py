@@ -167,6 +167,7 @@ def cli() -> None:
     type=int,
     default=2,
 )
+@click.option("-C", "--chunkify", is_flag=True)
 @with_client
 def get_address(
     client: "TrezorClient",
@@ -177,6 +178,7 @@ def get_address(
     multisig_xpub: List[str],
     multisig_threshold: Optional[int],
     multisig_suffix_length: int,
+    chunkify: bool,
 ) -> str:
     """Get address for specified path.
 
@@ -225,6 +227,7 @@ def get_address(
         script_type=script_type,
         multisig=multisig,
         unlock_path=get_unlock_path(address_n),
+        chunkify=chunkify,
     )
 
 
