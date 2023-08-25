@@ -180,7 +180,13 @@ where
         // Either moving with animation or just jumping to the final position directly.
         if do_animation && !animation_disabled() {
             let diff = page_counter as i16 - self.page_counter as i16;
-            self.animated_steps_to_do = diff;
+            // When setting the page counter to the same value as we are on,
+            // doing the all-around animation.
+            self.animated_steps_to_do = if diff == 0 {
+                self.choices.count() as i16
+            } else {
+                diff
+            };
         } else {
             self.page_counter = page_counter;
             self.update(ctx);
