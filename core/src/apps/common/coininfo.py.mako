@@ -136,8 +136,8 @@ ATTRIBUTES = (
 
 btc_names = ["Bitcoin", "Testnet", "Regtest"]
 
-coins_btc = [c for c in supported_on("trezor2", bitcoin) if c.name in btc_names]
-coins_alt = [c for c in supported_on("trezor2", bitcoin) if c.name not in btc_names]
+coins_btc = [c for c in supported_on("t2t1", bitcoin) if c.name in btc_names]
+coins_alt = [c for c in supported_on("t2t1", bitcoin) if c.name not in btc_names]
 
 %>\
 def by_name(name: str) -> CoinInfo:

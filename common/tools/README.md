@@ -55,7 +55,7 @@ for token in defs.erc20:
 
 support_info = coin_info.support_info(defs.misc)
 for key, support in support_info.values():
-    t2_support = support["trezor2"]
+    t2_support = support["t2t1"]
     coin_name = dict_by_coin_key[key]
     if t2_support:
         print(coin_name, "is supported since version", t2_support)
@@ -94,15 +94,15 @@ support statuses at the same time:
 $ ./support.py show Ontology
 misc:ONT - Ontology (ONT)
  * connect : NO
- * trezor1 : support info missing
- * trezor2 : support info missing
+ * t1b1 : support info missing
+ * t2t1 : support info missing
  * suite : NO
 
-$ ./support.py set misc:ONT trezor1=no -r "not planned on T1" trezor2=2.4.7
+$ ./support.py set misc:ONT t1b1=no -r "not planned on T1" t2t1=2.4.7
 misc:ONT - Ontology (ONT)
  * connect : NO
- * trezor1 : NO (reason: not planned on T1)
- * trezor2 : 2.4.7
+ * t1b1 : NO (reason: not planned on T1)
+ * t2t1 : 2.4.7
  * suite : NO
 ```
 

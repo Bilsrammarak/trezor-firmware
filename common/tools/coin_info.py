@@ -39,15 +39,17 @@ class SupportItemVersion(TypedDict):
 class SupportData(TypedDict):
     connect: SupportItemBool
     suite: SupportItemBool
-    trezor1: SupportItemVersion
-    trezor2: SupportItemVersion
+    t1b1: SupportItemVersion
+    t2t1: SupportItemVersion
+    t2b1: SupportItemVersion
 
 
 class SupportInfoItem(TypedDict):
     connect: bool
     suite: bool
-    trezor1: Literal[False] | str
-    trezor2: Literal[False] | str
+    t1b1: Literal[False] | str
+    t2t1: Literal[False] | str
+    t2b1: Literal[False] | str
 
 
 SupportInfo = Dict[str, SupportInfoItem]
@@ -452,7 +454,7 @@ def _load_fido_apps() -> FidoApps:
 
 RELEASES_URL = "https://data.trezor.io/firmware/{}/releases.json"
 MISSING_SUPPORT_MEANS_NO = ("connect", "suite")
-VERSIONED_SUPPORT_INFO = ("trezor1", "trezor2")
+VERSIONED_SUPPORT_INFO = ("t1b1", "t2t1", "t2b1")
 
 
 def get_support_data() -> SupportData:
@@ -505,7 +507,7 @@ def support_info(coins: Iterable[Coin] | CoinsInfo | dict[str, Coin]) -> Support
 
     Takes a collection of coins and generates a support-info entry for each.
     The support-info is a dict with keys based on `support.json` keys.
-    These are usually: "trezor1", "trezor2", "connect" and "suite".
+    These are usually: "t1b1", "t2t1", "t2b1", "connect" and "suite".
 
     The `coins` argument can be a `CoinsInfo` object, a list or a dict of
     coin items.

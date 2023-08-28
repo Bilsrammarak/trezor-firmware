@@ -6,7 +6,7 @@
 
 #include "messages-nem.pb.h"
 
-<% nem_list = list(supported_on("trezor1", nem)) %>\
+<% nem_list = list(supported_on("t1b1", nem)) %>\
 #define NEM_MOSAIC_DEFINITIONS_COUNT (${len(nem_list)})
 
 extern const NEMMosaicDefinition NEM_MOSAIC_DEFINITIONS[NEM_MOSAIC_DEFINITIONS_COUNT];

@@ -58,7 +58,7 @@ def by_slip44(slip44: int) -> EthereumNetworkInfo:
 
 # fmt: off
 def _networks_iterator() -> Iterator[NetworkInfoTuple]:
-% for n in sorted(supported_on("trezor2", eth), key=lambda network: (int(network.chain_id), network.name)):
+% for n in sorted(supported_on("t2t1", eth), key=lambda network: (int(network.chain_id), network.name)):
     yield (
         ${n.chain_id},  # chain_id
         ${n.slip44},  # slip44
