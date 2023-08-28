@@ -490,11 +490,11 @@ impl AutomaticMover {
 
         // TODO: decide on the logic here, make it adjustable
         if self.auto_moved_screens == 0 {
-            Duration::from_millis(700)
-        } else if self.auto_moved_screens < 3 {
             Duration::from_millis(500)
-        } else if self.auto_moved_screens < 10 {
+        } else if self.auto_moved_screens < 3 {
             Duration::from_millis(300)
+        } else if self.auto_moved_screens < 10 {
+            Duration::from_millis(200)
         } else {
             Duration::from_millis(100)
         }
