@@ -87,10 +87,8 @@ def get_features() -> Features:
             Capability.Binance,
             Capability.Cardano,
             Capability.Crypto,
-            Capability.EOS,
             Capability.Ethereum,
             Capability.Monero,
-            Capability.NEM,
             Capability.Ripple,
             Capability.Stellar,
             Capability.Tezos,
@@ -99,6 +97,15 @@ def get_features() -> Features:
             Capability.ShamirGroups,
             Capability.PassphraseEntry,
         ]
+
+        # Only some models have special altcoins
+        if utils.INTERNAL_MODEL in ("T2T1",):
+            f.capabilities.extend(
+                [
+                    Capability.NEM,
+                    Capability.EOS,
+                ]
+            )
 
     # Only some models are capable of SD card
     if utils.USE_SD_CARD:
