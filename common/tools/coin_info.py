@@ -463,14 +463,15 @@ def get_support_data() -> SupportData:
 
 
 def latest_releases() -> dict[str, Any]:
-    """Get latest released firmware versions for Trezor 1 and 2"""
+    """Get latest released firmware versions for all models"""
     if not requests:
         raise RuntimeError("requests library is required for getting release info")
 
     latest: dict[str, Any] = {}
-    for v in ("1", "2"):
-        releases = requests.get(RELEASES_URL.format(v)).json()
-        latest["trezor" + v] = max(tuple(r["version"]) for r in releases)
+    for model in ("t1b1", "t2t1", "t2b1"):
+        # TODO: support new model names in RELEASES_URL
+        releases = requests.get(RELEASES_URL.format(model)).json()
+        latest[model] = max(tuple(r["version"]) for r in releases)
     return latest
 
 
