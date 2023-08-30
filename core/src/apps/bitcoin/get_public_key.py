@@ -79,7 +79,6 @@ async def get_public_key(
     )
 
     if msg.show_display:
-        from trezor.enums import ButtonRequestType
         from trezor.ui.layouts import show_pubkey, confirm_path_warning
 
         from apps.common.paths import address_n_to_str
