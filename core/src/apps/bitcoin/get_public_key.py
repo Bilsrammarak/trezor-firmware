@@ -79,16 +79,20 @@ async def get_public_key(
     )
 
     if msg.show_display:
-        from trezor.ui.layouts import show_pubkey
+        from trezor.enums import ButtonRequestType
+        from trezor.ui.layouts import show_pubkey, confirm_path_warning
 
         from apps.common.paths import address_n_to_str
 
         from .keychain import address_n_to_name
 
         path = address_n_to_str(address_n)
-        account_name = address_n_to_name(coin, address_n, script_type)
+        account_name = address_n_to_name(
+            coin, address_n, script_type, account_level=True
+        )
         if account_name is None:
-            account = "Unknown account"
+            account = None
+            await confirm_path_warning(path)
         elif account_name == "":
             account = coin.coin_shortcut
         else:

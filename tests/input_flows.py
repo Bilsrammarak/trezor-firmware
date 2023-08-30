@@ -398,6 +398,9 @@ class InputFlowShowXpubQRCode(InputFlowBase):
         if "coinjoin" in layout.title().lower():
             self.debug.press_yes()
             br = yield
+        elif br.code == B.UnknownDerivationPath:
+            self.debug.press_yes()
+            br = yield
 
         self.debug.click(buttons.CORNER_BUTTON, wait=True)
         # synchronize; TODO get rid of this once we have single-global-layout
@@ -416,14 +419,17 @@ class InputFlowShowXpubQRCode(InputFlowBase):
     def input_flow_tr(self) -> BRGeneratorType:
         if self.passphrase:
             br = yield
-            self.debug.press_yes()
+            self.debug.press_right()
             br = yield
-            self.debug.press_yes()
+            self.debug.press_right()
 
         br = yield
         layout = self.debug.wait_layout()
         if "coinjoin" in layout.title().lower():
-            self.debug.press_yes()
+            self.debug.press_right()
+            br = yield
+        elif br.code == B.UnknownDerivationPath:
+            self.debug.press_right()
             br = yield
 
         # Go into details
