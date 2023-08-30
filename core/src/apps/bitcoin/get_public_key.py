@@ -79,7 +79,7 @@ async def get_public_key(
     )
 
     if msg.show_display:
-        from trezor.ui.layouts import show_pubkey, confirm_path_warning
+        from trezor.ui.layouts import confirm_path_warning, show_pubkey
 
         from apps.common.paths import address_n_to_str
 
